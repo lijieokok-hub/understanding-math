@@ -18,6 +18,14 @@
   let childWindow = null;
   let connected = false;
   let hasLostConnection = false;
+  let commandNotConfirmed = false;
+  let parentClient = '';
+  let activeSession = null;
+  let lastAcknowledgedSequence = -1;
+  let pendingCommands = [];
+  const CONNECTION_WAIT = 5000;
+  const monotonicNow = () => window.performance?.now?.() ?? Date.now();
+  let connectionStarted = monotonicNow();
   let lastRemoteRevision = -1;
   let lastRemoteTime = -1;
   let revision = 0;
@@ -36,8 +44,10 @@
   const setText = (id, value) => { const node = $(id); if (node) node.textContent = value; };
   const setAttr = (id, key, value) => { const node = $(id); if (node) node.setAttribute(key, String(value)); };
   const now = () => Date.now();
-  const clientId = uniqueSession();
+  let clientId = uniqueSession();
   let childClient = '';
+  // A WindowProxy can survive navigation; this marker belongs to this document only.
+  Object.defineProperty(window, '__reportPresenterSession', { get: () => activeSession });
   const stepCount = index => Math.max(1, faces[index].length);
   const hashFor = (index = current, face = step) => '#slide-' + (index + 1) + (face ? '-step-' + (face + 1) : '');
   const titleFor = index => slides[index].dataset.title || slides[index].querySelector('h1,h2')?.textContent || '';
@@ -227,7 +237,7 @@
     if (presenter) renderPresenter();
   }
   function connectionText() {
-    if (hasLostConnection) return tr('已断连：投影窗口已关闭或离开。保留最后页面、步骤及计时状态，现可独立继续。', 'Disconnected: the projection window closed or left. The last page, step and timer state are retained; continue independently.');
+    if (hasLostConnection) return tr('投影已断开，可独立翻页和计时；返回报告后重新打开讲者窗口。', 'Projection disconnected. Navigate and use the timer independently; reopen the presenter window after returning to the report.') + (commandNotConfirmed ? tr(' 上一次操作未获确认，请在此重新操作。', ' The last action was not confirmed; repeat it here.') : '');
     if (detachedView && connected) return tr('已连接投影窗口 · 双向同步', 'Connected to projection · two-way sync');
     if (detachedView && openerWindow) return tr('正在连接投影窗口…', 'Connecting to projection…');
     if (detachedView) return tr('独立讲者窗口 · 可本地操作与计时', 'Standalone presenter · local navigation and timer');
@@ -286,29 +296,55 @@
     return true;
   }
   function send(target, kind, payload = {}) {
-    if (!target || target.closed) return false;
+    if (!target) return false;
     try {
+      if (target.closed) return false;
       target.postMessage({ protocol: PROTOCOL, session, client: clientId, kind, ...payload }, targetOrigin);
       return true;
     } catch (_) { return false; }
   }
   function sendState() {
-    if (childWindow && !childWindow.closed) send(childWindow, 'state', { state: snapshot() });
+    if (childWindow) send(childWindow, 'state', { state: snapshot(), ackClient: childClient, ackSequence: lastCommandSequence });
   }
-  function disconnect() {
+  function acceptRemoteState(data) {
+    if (!Number.isSafeInteger(data.ackSequence) || data.ackSequence < lastAcknowledgedSequence || data.ackSequence > sequence || data.ackSequence < -1) return false;
+    if (!applySnapshot(data.state)) return false;
+    parentClient = data.client;
+    lastAcknowledgedSequence = data.ackSequence;
+    pendingCommands = pendingCommands.filter(item => item.sequence > lastAcknowledgedSequence);
+    return true;
+  }
+  function disconnect(unconfirmed = false) {
     if (!openerWindow) return;
     // Timer already contains the latest snapshot and continues from its local anchor.
     settleTimer();
     openerWindow = null;
     connected = false;
     hasLostConnection = true;
+    commandNotConfirmed = unconfirmed || pendingCommands.length > 0;
+    pendingCommands = [];
     updateConnection();
     announce(connectionText());
   }
   function checkOpener() {
     if (!openerWindow) return false;
-    try { if (openerWindow.closed) { disconnect(); return false; } }
-    catch (_) { disconnect(); return false; }
+    try {
+      if (openerWindow.closed) { disconnect(); return false; }
+      const marker = openerWindow.__reportPresenterSession;
+      if (!marker || marker.protocol !== PROTOCOL || marker.session !== session ||
+          typeof marker.client !== 'string' || !marker.client || (parentClient && marker.client !== parentClient)) {
+        disconnect(); return false;
+      }
+      parentClient = marker.client;
+    } catch (_) {
+      // Local file windows may have opaque origins; retain their authenticated message path.
+      if (expectedOrigin !== 'null') { disconnect(); return false; }
+    }
+    const at = monotonicNow();
+    if ((!connected && at - connectionStarted >= CONNECTION_WAIT) ||
+        (pendingCommands.length && at - pendingCommands[0].sentAt >= CONNECTION_WAIT)) {
+      disconnect(pendingCommands.length > 0); return false;
+    }
     return true;
   }
   function validCommand(value) {
@@ -336,7 +372,12 @@
   function command(value) {
     if (!validCommand(value)) return;
     if (detachedView && checkOpener()) {
-      if (send(openerWindow, 'command', { command: value, sequence: ++sequence })) return;
+      if (connected) {
+        const issued = ++sequence;
+        pendingCommands.push({ sequence: issued, sentAt: monotonicNow() });
+        if (send(openerWindow, 'command', { command: value, sequence: issued })) return;
+        pendingCommands.pop();
+      }
       disconnect();
     }
     execute(value);
@@ -359,9 +400,14 @@
     url.hash = hashFor();
     lastCommandSequence = -1;
     childClient = '';
+    activeSession = Object.freeze({ protocol: PROTOCOL, session, client: clientId });
     // This must stay directly inside the user's click/keyboard gesture.
     childWindow = window.open(url.href, 'report-presenter-' + session, 'popup,width=1440,height=960');
-    if (!childWindow) announce(tr('讲者窗口被浏览器拦截。请允许弹出窗口，或按 P 使用同窗模式。', 'Presenter popup was blocked. Allow popups, or press P for the same-window view.'));
+    if (!childWindow) {
+      activeSession = null;
+      session = '';
+      announce(tr('讲者窗口被浏览器拦截。请允许弹出窗口，或按 P 使用同窗模式。', 'Presenter popup was blocked. Allow popups, or press P for the same-window view.'));
+    }
     updateConnection();
   }
   window.addEventListener('message', event => {
@@ -371,10 +417,17 @@
     if (detachedView) {
       if (!openerWindow || event.source !== openerWindow) return;
       if (data.kind !== 'state' && data.kind !== 'disconnect') return;
-      if (!applySnapshot(data.state)) return;
+      if (typeof data.client !== 'string' || !data.client || (parentClient && data.client !== parentClient) || data.ackClient !== clientId) return;
+      if (data.kind === 'disconnect') {
+        // A final notification remains authoritative even if its last snapshot is stale.
+        acceptRemoteState(data);
+        disconnect();
+        return;
+      }
+      if (!checkOpener()) return;
+      if (!acceptRemoteState(data)) return;
       connected = true;
       updateConnection();
-      if (data.kind === 'disconnect') disconnect();
     } else {
       if (!childWindow || event.source !== childWindow) return;
       if (data.kind === 'hello' && typeof data.client === 'string' && data.client.length > 0 && data.client.length <= 128) {
@@ -496,8 +549,31 @@
     }
   });
   window.addEventListener('pagehide', () => {
-    if (!detachedView && childWindow) send(childWindow, 'disconnect', { state: snapshot() });
+    if (!detachedView) {
+      if (childWindow) send(childWindow, 'disconnect', { state: snapshot(), ackClient: childClient, ackSequence: lastCommandSequence });
+      activeSession = null;
+      childWindow = null;
+      childClient = '';
+      lastCommandSequence = -1;
+      session = '';
+    }
   });
+  window.addEventListener('pageshow', event => {
+    if (detachedView && event.persisted && openerWindow) {
+      if (pendingCommands.length) disconnect(true);
+      else {
+        // A restored child gets a fresh message epoch; old-document acknowledgements stay invalid.
+        clientId = uniqueSession();
+        sequence = 0;
+        lastAcknowledgedSequence = -1;
+        connected = false;
+        connectionStarted = monotonicNow();
+        if (checkOpener()) send(openerWindow, 'hello');
+      }
+    }
+    updateConnection();
+  });
+  window.addEventListener('focus', () => { if (detachedView) checkOpener(); });
   try {
     const preferences = JSON.parse(window.localStorage.getItem('math-understanding.preferences.v1') || '{}');
     theme = preferences?.theme === 'dark' ? 'dark' : 'light';
@@ -536,7 +612,7 @@
     if (detachedView) {
       if (checkOpener() && !connected) send(openerWindow, 'hello');
     } else if (childWindow) {
-      if (childWindow.closed) { childWindow = null; updateConnection(); }
+      if (childWindow.closed) { childWindow = null; activeSession = null; session = ''; updateConnection(); }
       else sendState();
     }
   }, 500);
