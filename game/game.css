@@ -21,14 +21,17 @@
 
 #debug[open]{max-height:70vh;overflow:auto}#debug output{overflow-wrap:anywhere}
 
-/* The approved main-site bird paths, without the outer ring, in the game only. */
-#home.brand{font-size:20px;gap:8px}
-#home .game-brand-mark{display:block;width:30px;height:30px;flex:0 0 30px;overflow:visible;color:inherit}
+/* The approved flying-bird image is decorative beside the game title. */
+#app{--game-brand-slot:48px;--game-brand-gap:10px;--game-bar-height:76px}
+#bar{padding-block:calc((var(--game-bar-height) - var(--game-brand-slot))/2);min-height:var(--game-bar-height)}
+#home.brand{font-size:20px;gap:var(--game-brand-gap)}
+#home .game-brand-mark,#loading .game-brand-mark{display:block;width:var(--game-brand-slot);height:var(--game-brand-slot);flex:0 0 var(--game-brand-slot);object-fit:contain;object-position:center;border:0;border-radius:0;background:none;box-shadow:none;filter:none}
 #home #brandLabel{min-width:0}
-#loading .loading-bird{display:flex;align-items:center;justify-content:center;color:#173e43}
-#loading .game-brand-mark{display:block;width:30px;height:30px;color:inherit}
-@media(max-width:700px){#home.brand{font-size:15px;gap:6px}#home #brandLabel{overflow-wrap:normal;word-break:normal}}
-@media(max-width:420px){html[lang="en"] #home #brandLabel{font-size:12px;line-height:1.2}}
+#loading .loading-bird{display:flex;align-items:center;justify-content:center}
+@media(max-width:700px){#app{--game-bar-height:62px}#home.brand{font-size:15px}#home #brandLabel{overflow-wrap:normal;word-break:normal}}
+@media(max-height:540px){#app{--game-bar-height:53px}}
+@media(max-width:420px){#app{--game-bar-height:62px}html[lang="en"] #home #brandLabel{font-size:12px;line-height:1.2}}
+@media(max-width:360px),(max-height:420px){#app{--game-brand-slot:40px;--game-brand-gap:8px}}
 
 /* Use Latin punctuation metrics for English game titles. */
 html[lang="en"] #home #brandLabel,html[lang="en"] .dialog.hero h1{font-family:Georgia,"Noto Serif","DejaVu Serif","Times New Roman",serif}
