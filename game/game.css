@@ -59,3 +59,9 @@ html[lang="en"] #home #brandLabel,html[lang="en"] .dialog.hero h1{font-family:Ge
 @media(max-height:360px){#toast.visible + #hint{visibility:hidden}}
 
 .dialog .progress-status{padding:12px 14px;border:1px solid #b39b61;border-radius:8px;background:#fff8df;color:#594a29;text-align:left;line-height:1.6}
+
+/* Keep the full title beside the four controls at very narrow widths. */
+@media(max-width:340px){
+  #app #bar .level-ident{position:absolute;right:12px;top:1px;padding:0 3px;line-height:1.2}
+  #bar nav{transform:translateY(2px)}
+}
