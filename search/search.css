@@ -1,0 +1,31 @@
+/* Extends the reading site's paper, ink and accent tokens. */
+.search-main{max-width:58rem;margin:0 auto;padding:2.5rem 1.25rem 5rem}
+.search-main h1{font-size:clamp(1.8rem,4vw,2.65rem);margin:.3rem 0 .8rem}
+.search-intro,.search-help{color:var(--muted,#60695f)}
+.search-intro{max-width:44rem;margin:0 0 1.5rem;font-size:1em}
+.search-form>label{display:block;font-weight:650;font-size:1em;margin-bottom:.5rem}
+.search-input-row{display:flex;gap:.6rem;align-items:stretch}
+.search-input-row input{width:100%;min-width:0;flex:1;font:inherit;background:var(--surface,#fcfaf3);color:var(--ink,#29352f);border:1px solid var(--line,#d6d8cb);border-radius:.4rem;padding:.7rem .85rem}
+.search-input-row button,.search-more{min-height:2.75rem;font:inherit;font-size:1em;padding:.65rem 1rem;border:1px solid var(--line,#d6d8cb);border-radius:.4rem;background:var(--surface,#fcfaf3);color:var(--ink,#29352f);cursor:pointer}
+.search-input-row button[type=submit]{background:var(--accent,#335943);color:var(--paper,#f6f3e9);border-color:var(--accent,#335943)}
+.search-main :focus-visible{outline:3px solid var(--orange,#9a511f);outline-offset:4px}
+.search-help{font-size:.9em;margin:.7rem 0}
+.search-status{font-size:.9em;min-height:1.7em;margin:1.4rem 0 .5rem;color:var(--muted,#60695f)}
+.search-state{padding:1.25rem;background:var(--surface,#fcfaf3);border:1px solid var(--line,#d6d8cb);border-radius:.4rem}
+.search-results{padding:0;list-style:none;margin:0}
+.search-results>li{padding:1.45rem 0;border-top:1px solid var(--line,#d6d8cb);min-width:0;overflow-wrap:anywhere}
+.search-results h2{font-size:1.2em;line-height:1.65;margin:0 0 .4rem}
+.search-results h2 a{text-decoration-thickness:1px;text-underline-offset:.18em}
+.search-result-title,.search-result-source{color:var(--muted,#60695f);font-size:.88em;line-height:1.75;margin:.4rem 0}
+.search-result-context{font-size:1em;line-height:1.9;margin:.65rem 0;max-width:100%;overflow-x:auto}
+.search-results .katex{font-size:1.06em}
+.search-more{margin:1rem 0}
+.search-main [hidden]{display:none!important}
+.search-aux-link{font-size:.94em}
+.search-brand-text{text-decoration:none;font-weight:650;letter-spacing:.03em}
+.search-footer{font-size:.9em;margin-top:3rem;color:var(--muted,#60695f)}
+@media(max-width:560px){.search-main{padding-top:1.5rem}.search-input-row{flex-wrap:wrap}.search-input-row input{flex-basis:100%}.search-input-row button{flex:1}.search-results h2{font-size:1.1em}.search-main .header-links{gap:.7rem}}
+@media(prefers-reduced-motion:reduce){.search-main *{scroll-behavior:auto!important}}
+
+/* Keep live announcements without duplicating the visible empty/error message. */
+.search-status[data-visual-hidden="true"]{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;margin:-1px}

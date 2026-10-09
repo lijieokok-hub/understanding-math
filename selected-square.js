@@ -1,0 +1,2 @@
+'use strict';
+(()=>{function init(){document.querySelectorAll('[data-square]').forEach(figure=>{if(figure.dataset.bound)return;figure.dataset.bound='true';figure.querySelectorAll('.sq-controls button').forEach(button=>button.addEventListener('click',()=>{figure.dataset.mode=button.dataset.mode;figure.querySelectorAll('.sq-controls button').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));}));if(window.MathNotes)window.MathNotes.render(figure);});}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();})();

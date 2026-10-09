@@ -1,0 +1,163 @@
+% Compile with XeLaTeX. Required fonts: Noto Serif CJK SC and Noto Sans CJK SC.
+\documentclass[12pt,a4paper]{article}
+\usepackage[margin=25mm,top=23mm,bottom=24mm]{geometry}
+\usepackage{fontspec}
+\setmainfont{Noto Serif CJK SC}
+\setsansfont{Noto Sans CJK SC}
+\usepackage{amsmath,amssymb}
+\usepackage{titlesec}
+\usepackage{needspace}
+\usepackage[unicode,colorlinks=true,linkcolor=black,urlcolor=black]{hyperref}
+\hypersetup{pdftitle={为什么控制振荡，就能得到逐点收敛？},pdfsubject={对一个振荡收敛引理的逐步阐释},pdfauthor={}}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip=0pt plus 1pt
+\XeTeXinterchartokenstate=1
+\linespread{1.15}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.30em}
+\setlength{\emergencystretch}{2em}
+\titleformat{\section}{\sffamily\bfseries\large}{}{0pt}{}
+\titlespacing*{\section}{0pt}{1.05em}{0.4em}
+\newcommand{\step}[1]{\par\addvspace{0.65em}\Needspace{5\baselineskip}\noindent\textbf{#1}\par\nobreak}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\osc}[2]{\max_{#1\leq\ell\leq#2}\lvert Z_\ell-Z_{#1}\rvert}
+\pagestyle{plain}
+\begin{document}
+\begin{center}
+{\sffamily\bfseries\Large 为什么控制振荡，就能得到逐点收敛？}
+\end{center}
+\vspace{0.2em}
+
+如果在一个正测集上，序列始终还有一定幅度的跳动，就能选出越来越多的时间段，使每段都贡献固定的平均振荡。总量因而至少线性增长。如果已知它最多按平方根增长，两者便矛盾。
+
+\noindent\textbf{讨论范围。}本文完整展开的是文献~\hyperref[ref:source]{[1]} 的 Lemma 3.6，见原稿 PDF 第~9~至~10~页。它是抽象的测度论引理，不需要混合性。把它用于三重平均所需的振荡估计，是另一个上游输入；本文不替代对该输入及相关文稿的审查。
+
+\section{先把命题写准}
+设 $(X,\mathcal F,\mu)$ 是概率空间，$Z_0,Z_1,\ldots$ 是一致有界的可测复值函数。下面的引理说明，一项对所有分块都成立的振荡界足以推出逐点收敛。
+
+\noindent\textbf{引理。}假设存在常数 $C\geq0$，使每个正整数 $w$ 和每组确定的整数端点
+\[
+0\leq k_1<\cdots<k_{w+1}
+\]
+都满足
+\begin{equation}\label{eq:oscillation}
+\sum_{i=1}^{w}\int_X
+\max_{k_i\leq\ell\leq k_{i+1}}
+\lvert Z_\ell(x)-Z_{k_i}(x)\rvert\dd\mu(x)
+\leq C\sqrt w.
+\end{equation}
+则 $Z_k(x)$ 在一个可测满测集上收敛。
+
+“确定的端点”指同一组端点用于全部 $x$。常数 $C$ 不能随端点或块数 $w$ 改变。引理没有给出收敛速度，也没有识别极限值。
+
+\section{证明的六个步骤}
+\step{1. 用尾部直径记录不收敛}
+定义
+\begin{equation}\label{eq:omega}
+\omega(x)=\lim_{K\to\infty}\sup_{p,q\geq K}
+\lvert Z_p(x)-Z_q(x)\rvert.
+\end{equation}
+尾部上确界随 $K$ 递减，且有界，因此极限存在。它是可测函数，因为这里只用了可数个可测函数的上确界与极限。条件 $\omega(x)=0$ 恰好表示该点的序列满足 Cauchy 条件。
+
+\step{2. 把不收敛统一成一个固定尺度}
+反设 $\mu(\{\omega>0\})>0$。由于
+\[
+\{\omega>0\}=\bigcup_{m=1}^{\infty}\{\omega>2/m\},
+\]
+可以选取 $\delta>0$，使
+\[
+E=\{x\in X:\omega(x)>2\delta\},\quad d=\mu(E)>0.
+\]
+这一步把“不同点可能以不同幅度不收敛”，变成“在同一个正测集上，都还有超过 $2\delta$ 的尾部振荡”。
+
+\step{3. 从任意起始时刻都能找到一次跳动}
+对任意确定的整数 $K\geq0$，三角不等式给出
+\[
+\sup_{p,q\geq K}\lvert Z_p(x)-Z_q(x)\rvert
+\leq 2\sup_{\ell\geq K}\,\lvert Z_\ell(x)-Z_K(x)\rvert.
+\]
+因此，对每个 $x\in E$ 都有
+\begin{equation}\label{eq:tail-jump}
+\sup_{\ell\geq K}\,\lvert Z_\ell(x)-Z_K(x)\rvert
+\geq\frac{\omega(x)}2>\delta.
+\end{equation}
+换句话说，如果所有后续值都离 $Z_K(x)$ 不超过 $\delta$，任意两个后续值就不会相距超过 $2\delta$。
+
+\step{4. 选择一个对所有点共用的有限终点}
+当整数 $L\to\infty$ 时，有限最大值
+\[
+M_{K,L}(x)=\max_{K\leq\ell\leq L}\lvert Z_\ell(x)-Z_K(x)\rvert
+\]
+单调增加到式~\eqref{eq:tail-jump} 左侧。由单调收敛定理，
+\[
+\lim_{L\to\infty}\int_X M_{K,L}\dd\mu
+=\int_X\sup_{\ell\geq K}\,\lvert Z_\ell-Z_K\rvert\dd\mu
+\geq\delta d.
+\]
+所以可以选出一个确定的整数 $L>K$，使
+\begin{equation}\label{eq:one-block}
+\int_X\max_{K\leq\ell\leq L}\lvert Z_\ell-Z_K\rvert\dd\mu
+\geq\frac{\delta d}{2}.
+\end{equation}
+
+这里不要求每个点在同一个 $\ell$ 跳动。每个点在这个有限块内各取最大值，最后再积分。终点 $L$ 是根据积分选出的一个整数，不是依赖 $x$ 的随机端点。
+
+\step{5. 重复选择，得到线性下界}
+从 $k_1=0$ 开始，在第 $i$ 次选择中令 $K=k_i$，再按式~\eqref{eq:one-block} 选取 $k_{i+1}=L>k_i$。这样得到一组确定的端点，而且每一块的积分振荡都至少为 $\delta d/2$。前 $w$ 块因此满足
+\[
+\sum_{i=1}^{w}\int_X
+\max_{k_i\leq\ell\leq k_{i+1}}
+\lvert Z_\ell-Z_{k_i}\rvert\dd\mu
+\geq\frac{w\delta d}{2}.
+\]
+
+\step{6. 与平方根上界比较}
+将这个下界与假设~\eqref{eq:oscillation} 比较，得到
+\[
+\frac{w\delta d}{2}\leq C\sqrt w,
+\quad\text{即}\quad
+\sqrt w\leq\frac{2C}{\delta d}.
+\]
+由于 $C,\delta,d$ 已经固定，取足够大的整数 $w$ 就产生矛盾。因此 $\mu(\{\omega>0\})=0$。在可测满测集 $\{\omega=0\}$ 上，序列是 Cauchy 序列。复数空间完备，故序列在该集合上收敛。\hfill$\square$
+
+\section{存在极限与识别极限}
+这个证明把逐点不收敛转化成一个可积分、可估计的代价。关键是上界比块数的线性增长慢，而不仅是 $\sqrt w$ 的具体形式。原文的调和分析工作负责提供统一的振荡界；上面的证明说明，有了这项界之后，怎样得到几乎处处收敛。
+
+随后仍需单独识别极限。例如，设一个有界平均序列 $A_N$ 已经几乎处处收敛，并且另有 $A_N\to c$ 于 $L^2$ 的结论，其中 $c$ 是常数。下面直接说明，怎样从 $L^2$ 收敛选出一个几乎处处收敛到 $c$ 的子序列。
+
+选取严格递增的 $N_j$，使
+\[
+\int_X\lvert A_{N_j}-c\rvert^2\dd\mu\leq2^{-j},
+\quad j\geq1.
+\]
+由 Tonelli 定理，非负项可以交换求和与积分，因而
+\[
+\int_X\sum_{j=1}^{\infty}\lvert A_{N_j}-c\rvert^2\dd\mu
+=\sum_{j=1}^{\infty}\int_X\lvert A_{N_j}-c\rvert^2\dd\mu
+\leq\sum_{j=1}^{\infty}2^{-j}=1.
+\]
+所以该级数几乎处处有限，其各项便趋于零，即 $A_{N_j}(x)\to c$ 几乎处处。在全序列与这个子序列的两个满测收敛集的交集上比较，就知道全序列的逐点极限也等于 $c$。
+
+单靠上述子序列论证，不能保证全部 $N$ 的收敛。振荡控制补上的，正是全序列不再反复跳动这一环。
+
+\section{换一个条件，检验理解}
+\noindent\textbf{问题。}把式~\eqref{eq:oscillation} 右侧的 $C\sqrt w$ 改为 $Cw$，还能推出收敛吗？
+
+不能。取
+\[
+Z_k(x)=(-1)^k,
+\]
+与 $x$ 无关。这个序列不收敛。但任意整数块 $k_i<k_{i+1}$ 都包含 $k_i+1$，故
+\[
+\max_{k_i\leq\ell\leq k_{i+1}}\lvert(-1)^\ell-(-1)^{k_i}\rvert=2.
+\]
+概率空间的总测度是 $1$，所以 $w$ 块的积分和恰为 $2w$，满足 $Cw$ 型界，其中 $C=2$。原证明需要让线性下界超过上界；如果上界本身允许线性增长，这个矛盾就消失了。
+
+\noindent\textbf{再问一句。}如果常数 $C$ 可以随每组选出的端点任意变化，证明在哪一步失效？第~6~步不能再把一个固定的 $C$ 与任意大的 $w$ 比较。因而，对所有端点及所有块数的统一性，是假设的实质内容。
+
+\section{来源与边界}
+\phantomsection\label{ref:source}
+\noindent [1] OpenAI. \href{https://github.com/openai/math/blob/main/preprints/Triple-ergodic-averages-with-distinct-integer-slopes-October-4-2026/triple-ergodic-distinct-slopes.pdf}{Triple Ergodic Averages with Distinct Integer Slopes}. 2026-10-04 版本，PDF 第~9~至~10~页，Lemma 3.6。标题可点击访问原稿。
+
+本文是该步骤的逐步阐释，展示了常数、端点与零测集的作用。这类由振荡推出收敛的方法有既有文献背景，不将这个抽象引理说成新稿独创。这里的核查只覆盖上述逻辑，不等于认证上游调和分析估计、原稿全部依赖或一般多重遍历猜想。实际读者的学习效果仍待检验。
+\end{document}

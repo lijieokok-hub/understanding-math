@@ -1,0 +1,855 @@
+{
+  "build": "2026-10-08-reading-dependencies-02",
+  "topics": [
+    {
+      "id": "multiple-ergodic-averages",
+      "title": {
+        "zh": "多重遍历平均",
+        "en": "Multiple ergodic averages"
+      },
+      "path": "topic.html"
+    }
+  ],
+  "documents": [
+    {
+      "id": "search",
+      "path": "search.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "章节与原文定位",
+        "en": "Find chapters and source locations"
+      }
+    },
+    {
+      "id": "interlude",
+      "path": "interlude.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "歇一会儿",
+        "en": "Take a breather"
+      }
+    },
+    {
+      "id": "index",
+      "path": "index.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "遍历论与动力系统",
+        "en": "Ergodic theory and dynamical systems"
+      }
+    },
+    {
+      "id": "topic",
+      "path": "topic.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "多重遍历平均",
+        "en": "Multiple ergodic averages"
+      }
+    },
+    {
+      "id": "popular",
+      "path": "popular.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "科普介绍：同样常见，为什么重复的方式不同？",
+        "en": "Overview: when frequency is not enough"
+      }
+    },
+    {
+      "id": "close-reading",
+      "path": "close-reading.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "多重遍历平均：原文精读",
+        "en": "Multiple ergodic averages: close reading"
+      }
+    },
+    {
+      "id": "reading-01",
+      "path": "reading-01.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第一单元：从振荡估计到全长度逐点收敛",
+        "en": "Unit 1: From oscillation estimates to pointwise convergence through all lengths"
+      }
+    },
+    {
+      "id": "reading-02",
+      "path": "reading-02.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第二单元：从局部估计到有限轨道振荡",
+        "en": "Unit 2: From local estimates to oscillation on finite orbits"
+      }
+    },
+    {
+      "id": "reading-03",
+      "path": "reading-03.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元：固定函数的行估计如何容许深度变化",
+        "en": "Unit 3: Extending row estimates from fixed to depth-varying inputs"
+      }
+    },
+    {
+      "id": "standard-factor",
+      "path": "standard-factor.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "补充：标准因子",
+        "en": "Supplement: standard factors"
+      }
+    },
+    {
+      "id": "reading-03b",
+      "path": "reading-03b.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（续）：投影增量与光滑零均值行",
+        "en": "Unit 3, continued: Projection increments and smooth mean-zero rows"
+      }
+    },
+    {
+      "id": "reading-03c",
+      "path": "reading-03c.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（续）：局部检测、投影增益与停止区间",
+        "en": "Unit 3, continued: Local detection, projection gain, and stopping intervals"
+      }
+    },
+    {
+      "id": "reading-03d",
+      "path": "reading-03d.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（续）：四个位置的循环逼近与最早两个增量",
+        "en": "Unit 3, continued: cyclic approximation in four positions and the earliest two increments"
+      }
+    },
+    {
+      "id": "reading-03e",
+      "path": "reading-03e.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（续）：分离后的尺度求和与固定预测函数族",
+        "en": "Unit 3, continued: summing scales after separation and fixing the predictor family"
+      }
+    },
+    {
+      "id": "reading-03f",
+      "path": "reading-03f.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（续）：在固定使用深度上延迟投影",
+        "en": "Unit 3, continued: delaying the projection at a fixed depth of use"
+      }
+    },
+    {
+      "id": "reading-03g",
+      "path": "reading-03g.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（续）：实际构造两个延迟投影",
+        "en": "Unit 3, continued: constructing the two delayed projections"
+      }
+    },
+    {
+      "id": "reading-03h",
+      "path": "reading-03h.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（续）：完整四元组的小量与三个主要模式",
+        "en": "Unit 3, continued: smallness of the full quadruple and the three main patterns"
+      }
+    },
+    {
+      "id": "reading-03s",
+      "path": "reading-03s.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（补）：主投影的闭合与局部化",
+        "en": "Unit 3, supplement: closure of main projections and localization"
+      }
+    },
+    {
+      "id": "reading-03i",
+      "path": "reading-03i.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（续）：局部输出跨深度变化的三个来源",
+        "en": "Unit 3, continued: three sources of depth variation in local outputs"
+      }
+    },
+    {
+      "id": "reading-03j",
+      "path": "reading-03j.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（续）：冻结模式行为什么只付主列函数的代价",
+        "en": "Unit 3, continued: why frozen mode rows cost only the main-column bound"
+      }
+    },
+    {
+      "id": "reading-03k",
+      "path": "reading-03k.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（续）：坏层数怎样控制模式行的平方和",
+        "en": "Unit 3, continued: how bad-height counts control square sums of mode rows"
+      }
+    },
+    {
+      "id": "reading-03l",
+      "path": "reading-03l.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（续）：先选择偏移，再控制非核心部分的路径平方和",
+        "en": "Unit 3, continued: choosing offsets before bounding non-core square sums along paths"
+      }
+    },
+    {
+      "id": "reading-03m",
+      "path": "reading-03m.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（续）：核心代表的继承与首个超阈值区间",
+        "en": "Unit 3, continued: inherited core representatives and first threshold crossings"
+      }
+    },
+    {
+      "id": "reading-03n",
+      "path": "reading-03n.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（续）：三个非核心位置与两个非核心位置为何分开处理",
+        "en": "Unit 3, continued: why two and three non-core positions require different arguments"
+      }
+    },
+    {
+      "id": "reading-03o",
+      "path": "reading-03o.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（续）：把随深度变化的非核心函数存成固定向量",
+        "en": "Unit 3, continued: representing depth-varying non-core functions by fixed vectors"
+      }
+    },
+    {
+      "id": "reading-03p",
+      "path": "reading-03p.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（续）：短块比较与整祖先区间最大值",
+        "en": "Unit 3, continued: short-block comparison and maximal averages on whole ancestor intervals"
+      }
+    },
+    {
+      "id": "reading-03q",
+      "path": "reading-03q.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（续）：核心元组的计数与振幅插值",
+        "en": "Unit 3, continued: counting core tuples and interpolating amplitudes"
+      }
+    },
+    {
+      "id": "reading-03t",
+      "path": "reading-03t.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（扩展）：稀疏尺度上的有限计数",
+        "en": "Unit 3, extension: finite counting on sparse scales"
+      }
+    },
+    {
+      "id": "reading-03r",
+      "path": "reading-03r.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第三单元（续）：共同参数与局部估计的完成",
+        "en": "Unit 3, continued: common parameters and completion of the local estimate"
+      }
+    },
+    {
+      "id": "reading-04a",
+      "path": "reading-04a.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第四单元（上）：逐点失败如何形成一个选取分布",
+        "en": "Unit 4, Part I: From pointwise failure to a selected law"
+      }
+    },
+    {
+      "id": "reading-04b",
+      "path": "reading-04b.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第四单元（下）：给定全部 distal 参数后的条件分布",
+        "en": "Unit 4, Part II: Conditional laws given all distal parameters"
+      }
+    },
+    {
+      "id": "reading-04c",
+      "path": "reading-04c.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第四单元（续）：低维投影与近正交张量",
+        "en": "Unit 4, continued: Low-dimensional projections of nearly orthogonal tensors"
+      }
+    },
+    {
+      "id": "reading-04d",
+      "path": "reading-04d.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第四单元（续）：三组辅助变量为何能保留指定的独立性",
+        "en": "Unit 4, continued: Preserving the required independence of three auxiliary groups"
+      }
+    },
+    {
+      "id": "reading-04e",
+      "path": "reading-04e.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第四单元（续）：最大辅助位置数与稳定条件期望",
+        "en": "Unit 4, continued: Maximizing auxiliary positions and stabilizing conditional expectations"
+      }
+    },
+    {
+      "id": "reading-04f",
+      "path": "reading-04f.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第四单元（下篇续）：方阵的条件分布与非零相关",
+        "en": "Unit 4, continued: Conditional laws in the square array and a nonzero correlation"
+      }
+    },
+    {
+      "id": "reading-05a",
+      "path": "reading-05a.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第五单元（上）：任意有限阶中的三坐标条件分布",
+        "en": "Unit 5, Part I: Three-state conditional laws at arbitrary finite order"
+      }
+    },
+    {
+      "id": "reading-05b",
+      "path": "reading-05b.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第五单元（中）：最小支撑与最大辅助位置数",
+        "en": "Unit 5, Part II: Minimal support and the maximal number of auxiliary positions"
+      }
+    },
+    {
+      "id": "reading-05c",
+      "path": "reading-05c.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "第五单元（下）：单状态条件期望与方阵中的非零相关",
+        "en": "Unit 5, Part III: Single-state conditioning and nonzero correlations in the square array"
+      }
+    },
+    {
+      "id": "reading-r",
+      "path": "reading-r.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "A/B 的多重混合依赖：R 原文精读导读",
+        "en": "The multiple-mixing input in A and B: a guide to R"
+      }
+    },
+    {
+      "id": "reading-r01",
+      "path": "reading-r01.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "从失败布局到零熵见证与有序数组",
+        "en": "From failure configurations to a zero-entropy witness and ordered arrays"
+      }
+    },
+    {
+      "id": "reading-r02",
+      "path": "reading-r02.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "有序数组的饱和扩张与条件局部性",
+        "en": "Saturated array extensions and conditional locality"
+      }
+    },
+    {
+      "id": "reading-r03",
+      "path": "reading-r03.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "算子方阵与精确函数线的完备性",
+        "en": "Operator squares and completeness of exact lines"
+      }
+    },
+    {
+      "id": "reading-r04",
+      "path": "reading-r04.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "可测标签与有限移动块",
+        "en": "Measurable labels and finite moving blocks"
+      }
+    },
+    {
+      "id": "reading-r05",
+      "path": "reading-r05.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "熵、单轨道代数与最后消去",
+        "en": "Entropy, single-orbit algebra, and cancellation"
+      }
+    },
+    {
+      "id": "reading-h",
+      "path": "reading-h.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "H 的调和分析依赖：从局部形式读到 D",
+        "en": "From local forms in H to the estimates used in D"
+      }
+    },
+    {
+      "id": "reading-h01",
+      "path": "reading-h01.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "成功高度之后：从标量 Fourier 展开到频率测试",
+        "en": "After the successful height: from scalar Fourier expansions to frequency tests"
+      }
+    },
+    {
+      "id": "reading-h07",
+      "path": "reading-h07.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "一次共享的随机染色怎样留下小异常集合",
+        "en": "One shared random coloring and a small exceptional set"
+      }
+    },
+    {
+      "id": "reading-h02",
+      "path": "reading-h02.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "历史球掩膜与整个端点空间的 Bessel 界",
+        "en": "Historical ball masks and Bessel bounds for whole endpoint spaces"
+      }
+    },
+    {
+      "id": "reading-h03",
+      "path": "reading-h03.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "快空间怎样沿一条有限路径传到端点",
+        "en": "Passing fast spaces along a finite path"
+      }
+    },
+    {
+      "id": "reading-h04",
+      "path": "reading-h04.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "两个观察坐标怎样检测返回的频率增量",
+        "en": "Detecting return increments with two observation coordinates"
+      }
+    },
+    {
+      "id": "reading-h05",
+      "path": "reading-h05.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "从全体小返回的增量界到有理快分裂",
+        "en": "From small-return increment bounds to a rational fast splitting"
+      }
+    },
+    {
+      "id": "reading-h06",
+      "path": "reading-h06.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "同槽位内积的检测：平滑区间与固定 Fourier 能量",
+        "en": "Detecting same-slot inner products by smoothing and Fourier energy"
+      }
+    },
+    {
+      "id": "reading-h08",
+      "path": "reading-h08.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "同一个曲率标签怎样产生固定的检测模板",
+        "en": "Fixed testing templates from one curvature tag"
+      }
+    },
+    {
+      "id": "reading-h09",
+      "path": "reading-h09.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "变化的投影历史怎样仍能使列目录有限终止",
+        "en": "Why a column catalog still terminates with changing projection histories"
+      }
+    },
+    {
+      "id": "reading-h10",
+      "path": "reading-h10.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "三个固定基本列为什么只留下有限个活跃尺度",
+        "en": "Why three fixed basic columns leave only finitely many active scales"
+      }
+    },
+    {
+      "id": "reading-h10-appendix",
+      "path": "reading-h10-appendix.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "H10 技术附录：三变量图表计算",
+        "en": "H10 technical appendix: three-variable chart calculations"
+      }
+    },
+    {
+      "id": "reading-h11",
+      "path": "reading-h11.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "原始基本列怎样产生，以及一条路径究竟要预留多少标签",
+        "en": "How original basic columns are produced and how many labels a path must reserve"
+      }
+    },
+    {
+      "id": "reading-h11-spatial",
+      "path": "reading-h11-spatial.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "H11 技术附录：任意空间深度的压缩",
+        "en": "H11 technical appendix: compression at arbitrary spatial depths"
+      }
+    },
+    {
+      "id": "reading-h11-detection",
+      "path": "reading-h11-detection.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "H11 技术附录：局部残差检测",
+        "en": "H11 technical appendix: local residual detection"
+      }
+    },
+    {
+      "id": "reading-h11-predictor",
+      "path": "reading-h11-predictor.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "H11 技术附录：固定预测目录",
+        "en": "H11 technical appendix: the fixed prediction catalog"
+      }
+    },
+    {
+      "id": "reading-h11-parameters",
+      "path": "reading-h11-parameters.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "H11 参数说明：误差与目录预算",
+        "en": "H11 parameter note: error and catalog budgets"
+      }
+    },
+    {
+      "id": "reading-h12",
+      "path": "reading-h12.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "从实际搜索历史到当前组局部化，再把远带移向侧参数",
+        "en": "From actual search histories to current-group localization and far-band transfer to side arguments"
+      }
+    },
+    {
+      "id": "reading-h12-history",
+      "path": "reading-h12-history.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "H12 技术附录：实际历史清单与误差量词",
+        "en": "H12 technical appendix: the actual history list and error quantifiers"
+      }
+    },
+    {
+      "id": "reading-h13",
+      "path": "reading-h13.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "短深度块怎样与同一个有限深度常数比较",
+        "en": "Comparing a short depth block with the same finite-depth constant"
+      }
+    },
+    {
+      "id": "reading-h13-technical",
+      "path": "reading-h13-technical.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "H13 附录：计算补充与边界例子",
+        "en": "H13 appendix: further calculations and boundary examples"
+      }
+    },
+    {
+      "id": "reading-h13-sources",
+      "path": "reading-h13-sources.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "H13 附录：混合范数极大估计所用的文献版本",
+        "en": "H13 appendix: sources for the mixed-norm maximal estimate"
+      }
+    },
+    {
+      "id": "graduate",
+      "path": "graduate.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "基础定义与推导补充",
+        "en": "Definitions and background arguments"
+      }
+    },
+    {
+      "id": "lecture",
+      "path": "lecture.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "从振荡控制到逐点收敛",
+        "en": "From oscillation bounds to pointwise convergence"
+      }
+    },
+    {
+      "id": "demo",
+      "path": "demo.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "三次相加以后，真的均匀了吗？",
+        "en": "After three sums, is the distribution uniform?"
+      }
+    },
+    {
+      "id": "method",
+      "path": "method.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "阅读、疑问与勘误",
+        "en": "Reading, questions, and corrections"
+      }
+    }
+  ]
+}

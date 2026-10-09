@@ -1,0 +1,14 @@
+@import url("./annotations.css");
+.annotation-intro{font-size:.9em;line-height:1.7;color:var(--muted);border-left:3px solid var(--accent);padding:.6em 1em;margin-block:1rem 2rem}
+.annotation-discussion{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line)}
+.annotation-ui,.annotation-thread{color:var(--ink)}
+.annotation-ui button,.annotation-thread button{background:var(--paper,#f6f3e9);color:var(--ink);border-color:var(--line)}
+.annotation-menu,.annotation-dialog,.annotation-thread,.annotation-live{background:var(--paper,#f6f3e9);color:var(--ink);border-color:var(--line)}
+.annotation-dialog textarea{background:var(--surface,#fffdf8);color:var(--ink);border-color:var(--line)}
+.annotation-quote,.annotation-thread blockquote{background:var(--surface-2,#eeeade);color:var(--ink);border-color:var(--accent)}
+.annotation-location,.annotation-help{color:var(--muted)}
+.annotation-ui .annotation-selection-button,.annotation-actions button:last-child{background:var(--accent,#2536cf)!important;color:var(--button-ink,#fff)!important}
+html[data-theme="dark"] .annotation-ui .annotation-selection-button,html[data-theme="dark"] .annotation-actions button:last-child{color:#101923!important}
+.annotation-anchor-warning{color:var(--orange,#9c4d13)}
+
+.annotation-quote .katex-display{max-width:100%;overflow-x:auto;overflow-y:hidden}.annotation-quote .katex-display>.katex{white-space:nowrap}

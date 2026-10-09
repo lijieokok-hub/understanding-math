@@ -1,0 +1,23 @@
+/* Load after host styles. Only the added peripheral controls are styled. */
+.mm-controls,.mm-brand-aside,.mm-theme-aside{--mm-ink:var(--ink,#273b47);--mm-muted:var(--muted,#536871);--mm-surface:var(--surface,#f9f7f0);--mm-line:var(--line,#c3cecd);--mm-gold:#806528;font:400 14px/1.65 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--mm-ink);max-width:100%;box-sizing:border-box;overflow-wrap:anywhere}
+:root[data-theme=dark] :is(.mm-controls,.mm-brand-aside,.mm-theme-aside){--mm-ink:var(--ink,#e7ebe8);--mm-muted:var(--muted,#bdcaca);--mm-surface:var(--surface,#1b2932);--mm-line:var(--line,#536871);--mm-gold:#dfc382}
+.mm-controls [hidden],.mm-brand-aside[hidden],.mm-theme-aside[hidden]{display:none!important}
+.mm-controls{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.mm-controls button,.mm-theme-aside button{font:inherit;font-size:14px;line-height:1.5;min-height:44px;max-width:100%;padding:.45rem .7rem;border:1px solid var(--mm-line);border-radius:6px;background:transparent;color:var(--mm-ink);cursor:pointer;white-space:normal;box-sizing:border-box}
+.mm-controls button:hover,.mm-theme-aside button:hover{background:var(--mm-surface);border-color:var(--mm-gold)}
+.mm-controls button:focus-visible,.mm-theme-aside button:focus-visible{outline:3px solid var(--mm-gold);outline-offset:3px}
+.mm-controls [aria-pressed=true]{border-color:var(--mm-gold);text-decoration:underline;text-underline-offset:.2em}
+.mm-brand-aside{border-left:2px solid var(--mm-gold);padding:.4rem 0 .4rem .8rem;margin:.55rem 0 .25rem;transform-origin:left center}
+.mm-theme-aside{display:flex;align-items:baseline;justify-content:space-between;gap:.75rem;flex-wrap:wrap;border-top:1px solid var(--mm-line);padding:.5rem 0;margin-top:.5rem}
+.mm-theme-aside span{flex:1 1 14rem;min-width:0}
+.mm-theme-aside button{flex:0 0 auto;padding:.25rem .6rem}
+.mm-preference-status{font-size:14px;color:var(--mm-muted);margin:0;width:100%;line-height:1.6}
+.mm-preference-status:empty{display:none}
+@media(prefers-reduced-motion:reduce){.mm-brand-aside,.mm-theme-aside{animation:none!important;transition:none!important;transform:none!important}}
+@media print{.mm-controls,.mm-brand-aside,.mm-theme-aside{display:none!important}}
+
+/* Pointer hover/focus uses the brand itself; coarse pointers keep an icon-only target. */
+.mm-brand-trigger{display:none}
+.mm-brand-trigger button{min-width:44px;padding:.35rem;white-space:nowrap}
+.mm-brand-trigger button>span{font-size:22px;line-height:1}
+@media(hover:none),(any-pointer:coarse){.mm-brand-trigger{display:flex}}

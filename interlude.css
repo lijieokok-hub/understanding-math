@@ -1,0 +1,44 @@
+/* Scoped footer component. No dependencies, fixed overlays, or global selectors. */
+.understanding-interlude{--mi-paper:#f9f7f0;--mi-card:#fffdf7;--mi-ink:#273b47;--mi-muted:#536871;--mi-line:#c3cecd;--mi-teal:#426366;--mi-gold:#806528;--mi-gold-soft:#eae1c8;--mi-soft:#edf0e9;box-sizing:border-box;max-width:54rem;margin:0;color:var(--mi-ink);font:400 16px/1.65 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;text-align:left;overflow-wrap:anywhere}
+:root[data-theme=dark] .understanding-interlude,.understanding-interlude[data-mi-theme=dark]{--mi-paper:#1b2932;--mi-card:#22343e;--mi-ink:#e7ebe8;--mi-muted:#bdcaca;--mi-line:#536871;--mi-teal:#b6cfca;--mi-gold:#dfc382;--mi-gold-soft:#3a3b31;--mi-soft:#2b3d43;color-scheme:dark}
+.understanding-interlude[data-mi-theme=light]{--mi-paper:#f9f7f0;--mi-card:#fffdf7;--mi-ink:#273b47;--mi-muted:#536871;--mi-line:#c3cecd;--mi-teal:#426366;--mi-gold:#806528;--mi-gold-soft:#eae1c8;--mi-soft:#edf0e9;color-scheme:light}
+.understanding-interlude *{box-sizing:border-box}
+.understanding-interlude [hidden]{display:none!important}
+.understanding-interlude summary{display:flex;align-items:center;gap:.7rem;width:fit-content;min-height:44px;max-width:100%;padding:.5rem 0;list-style:none;font-size:16px;font-weight:550;color:var(--mi-teal);cursor:pointer;text-decoration:underline;text-underline-offset:.3em;text-decoration-color:var(--mi-line)}
+.understanding-interlude summary::-webkit-details-marker{display:none}
+.understanding-interlude .mi-summary-mark{display:inline-block;font-size:20px;line-height:1;text-decoration:none}
+.understanding-interlude[open] .mi-summary-mark{transform:rotate(45deg)}
+.understanding-interlude .mi-body{margin-top:1rem;border:1px solid var(--mi-line);border-radius:14px;padding:clamp(1rem,4vw,2.5rem);background:var(--mi-paper)}
+.understanding-interlude .mi-topline{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;color:var(--mi-muted);font-size:14px}
+.understanding-interlude .mi-topline p{margin:0}
+.understanding-interlude .mi-topline>span{color:var(--mi-gold);font-family:ui-monospace,monospace;letter-spacing:.08em}
+.understanding-interlude h2{font-size:clamp(1.45rem,3vw,2rem);line-height:1.4;font-weight:550;margin:1rem 0 1.4rem;color:var(--mi-ink)}
+.understanding-interlude .mi-tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1.5rem}
+.understanding-interlude button{font:inherit;font-size:14px;line-height:1.45;min-height:44px;max-width:100%;cursor:pointer;white-space:normal;border:1px solid var(--mi-line);border-radius:7px;padding:.6rem .85rem;color:var(--mi-teal);background:transparent}
+.understanding-interlude .mi-tabs button[aria-selected=true]{color:var(--mi-ink);background:var(--mi-gold-soft);border-color:var(--mi-gold);font-weight:600}
+.understanding-interlude button:hover{background:var(--mi-soft)}
+.understanding-interlude :is(button,summary,.mi-panel):focus-visible{outline:3px solid var(--mi-gold);outline-offset:4px}
+.understanding-interlude .mi-panel{border-radius:7px;min-width:0}
+.understanding-interlude .mi-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(.5rem,2vw,1rem);perspective:900px}
+.understanding-interlude .mi-card{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;padding:1.4rem .65rem 1.2rem;border:1px solid var(--mi-line);border-top:3px solid var(--mi-gold);border-radius:9px;background:var(--mi-card);transform-origin:center;backface-visibility:hidden}
+.understanding-interlude .mi-letter{font:500 clamp(2.5rem,6vw,4.5rem)/1.05 Georgia,"Times New Roman",serif;color:var(--mi-ink)}
+.understanding-interlude .mi-word{font-size:clamp(14px,1.6vw,17px);line-height:1.5;min-height:1.5em;text-align:center;color:var(--mi-teal);max-width:100%}
+.understanding-interlude .mi-caption{font-size:17px;line-height:1.8;min-height:3.6em;margin:1.5rem 0 1rem;color:var(--mi-ink);max-width:42rem}
+.understanding-interlude .mi-actions{display:flex;align-items:center;justify-content:space-between;gap:.65rem;flex-wrap:wrap;margin-top:1rem}
+.understanding-interlude .mi-actions [data-mi-next]{border-color:var(--mi-teal)}
+.understanding-interlude .mi-actions [data-mi-close]{border-color:transparent;text-decoration:underline;text-underline-offset:.2em}
+.understanding-interlude .mi-hint{font-size:14px;color:var(--mi-muted);margin:1rem 0 0;line-height:1.6}
+.understanding-interlude .mi-footnote{font-size:14px;line-height:1.7;margin:1.4rem 0 0;padding-top:1rem;border-top:1px solid var(--mi-line);color:var(--mi-muted)}
+@media(max-width:460px){.understanding-interlude .mi-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.understanding-interlude .mi-card{padding:1rem .55rem}.understanding-interlude .mi-letter{font-size:2.7rem}.understanding-interlude .mi-word{font-size:15px}.understanding-interlude .mi-caption{font-size:16px;min-height:0}.understanding-interlude .mi-topline{gap:.4rem}.understanding-interlude .mi-actions{align-items:stretch}.understanding-interlude .mi-actions button{flex:1 1 100%}}
+@media(prefers-reduced-motion:reduce){.understanding-interlude *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media print{.understanding-interlude{display:none!important}}
+
+/* Whole Chinese phrases stay intact instead of forced acronym translations. */
+.understanding-interlude .mi-phrase{font-size:clamp(18px,2.2vw,23px);line-height:1.65;font-weight:550;margin:1.5rem 0 .65rem;color:var(--mi-ink)}
+.understanding-interlude .mi-phrase+.mi-caption{margin-top:.6rem}
+
+/* Chinese full-phrase states use a compact typographic title, not empty word slots. */
+.understanding-interlude .mi-cards--phrase{width:14rem;max-width:100%;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;padding:.2rem 0 .75rem;border-bottom:2px solid var(--mi-gold)}
+.understanding-interlude .mi-cards--phrase .mi-card{border:0;border-radius:0;padding:.25rem 0;background:transparent;gap:0}
+.understanding-interlude .mi-cards--phrase .mi-letter{font-size:2.6rem;color:var(--mi-teal)}
+.understanding-interlude .mi-cards--phrase+.mi-phrase{font-size:clamp(22px,3vw,29px);line-height:1.6;margin:1.3rem 0 .6rem;max-width:28em}

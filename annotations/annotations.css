@@ -1,0 +1,23 @@
+.annotation-ui,.annotation-thread{font-family:inherit;color:var(--annotation-ink,#183833)}
+.annotation-selection-button,.annotation-menu{position:fixed;z-index:10000;box-shadow:0 5px 24px #102e332a}
+.annotation-ui button,.annotation-thread button{font:inherit;min-height:44px;cursor:pointer;border:1px solid #839d94;border-radius:9px;padding:9px 15px;background:#fbfff9;color:#183833}
+.annotation-ui button:focus-visible,.annotation-thread button:focus-visible,.annotation-dialog textarea:focus-visible{outline:3px solid #ca6600;outline-offset:3px}
+.annotation-ui button:disabled{opacity:.55;cursor:default}
+.annotation-selection-button{background:#155c4e!important;color:#fff!important}
+.annotation-menu{background:#fff;padding:5px;border:1px solid #9bb3a8;border-radius:12px}
+.annotation-dialog{box-sizing:border-box;width:min(620px,calc(100vw - 24px));max-height:calc(100dvh - 32px);overflow:auto;border:1px solid #9bb3a8;border-radius:20px;padding:24px;background:#fcfdf8;color:#173c32}
+.annotation-dialog::backdrop{background:#102a2566}
+.annotation-dialog h2{font-size:1.3rem;margin:0 0 12px}
+.annotation-dialog label{display:block;font-weight:650}
+.annotation-dialog textarea{box-sizing:border-box;display:block;width:100%;font:inherit;line-height:1.6;border:1px solid #849f94;border-radius:10px;margin:8px 0;padding:12px;resize:vertical;background:white;color:#173c32}
+.annotation-quote,.annotation-thread blockquote{max-height:10rem;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;border-left:3px solid #90b09a;margin:12px 0;padding:10px 14px;background:#eef4e9}
+.annotation-location,.annotation-help{font-size:.85rem;line-height:1.5;color:#496157}
+.annotation-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+.annotation-actions button:last-child{background:#155c4e;color:white}
+.annotation-thread{border:1px solid #c1d1c5;border-radius:14px;padding:18px;margin-block:16px;background:#fafdf5;overflow-wrap:anywhere}
+.annotation-thread p{white-space:pre-wrap}
+.annotation-anchor-warning{color:#8d4b10}
+.annotation-live:empty{display:none}
+.annotation-live{position:fixed;z-index:9999;bottom:16px;left:16px;max-width:calc(100vw - 64px);padding:14px 18px;border:1px solid #9bb3a8;border-radius:12px;background:#f6ffec;box-shadow:0 5px 24px #102e332a}
+.annotation-ui [hidden]{display:none!important}
+@media(max-width:600px){.annotation-dialog{padding:18px}.annotation-selection-button{min-height:48px}.annotation-dialog textarea{font-size:16px}}

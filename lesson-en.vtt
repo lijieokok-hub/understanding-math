@@ -1,0 +1,67 @@
+WEBVTT
+
+00:00:00.333 --> 00:00:06.573
+Three independent square remainders can reach all four positions. Does that make their sum uniform?
+
+00:00:07.773 --> 00:00:14.973
+Keep only remainders after division by four: zero, one, two, three. The square of an integer can leave only zero or one.
+
+00:00:15.523 --> 00:00:22.813
+Choose a number uniformly from zero through three, then square it. The remainder is zero or one, with equal probability.
+
+00:00:22.973 --> 00:00:26.237
+Now make two independent draws and add their remainders.
+
+00:00:26.787 --> 00:00:29.019
+There are four equally likely pairs.
+
+00:00:29.299 --> 00:00:31.139
+Zero plus zero lands at zero.
+
+00:00:31.419 --> 00:00:34.549
+Zero plus one and one plus zero both land at one.
+
+00:00:34.829 --> 00:00:36.449
+One plus one lands at two.
+
+00:00:36.999 --> 00:00:44.607
+Combining those paths gives one quarter at zero, one half at one, and one quarter at two. Position three is still missing.
+
+00:00:45.157 --> 00:00:52.467
+Add a third independent sample. Now every position is reachable. But compare the bars with the one-quarter dashed line.
+
+00:00:52.627 --> 00:00:57.259
+The outer two probabilities are one eighth; the middle two are three eighths.
+
+00:00:57.809 --> 00:01:01.349
+Reaching every position does not make the distribution uniform.
+
+00:01:01.509 --> 00:01:09.379
+These are three different questions: which positions are reachable, how large is the bias, and are the probabilities exactly equal?
+
+00:01:09.929 --> 00:01:19.389
+In this example, some bias remains after every finite number of additions. The distribution approaches uniformity as the number of additions tends to infinity.
+
+00:01:19.939 --> 00:01:23.619
+Here is a different limit. Keep the number of additions fixed.
+
+00:01:23.779 --> 00:01:30.879
+Draw each integer independently and uniformly from one through an upper bound, then add the remainders of their squares.
+
+00:01:31.039 --> 00:01:37.959
+As the upper bound grows, this model still approaches the corresponding finite-sum distribution. It is not uniform.
+
+00:01:38.509 --> 00:01:47.039
+Now change the rule. Each draw is zero or two, with equal probability. How many independent additions would it take to reach an odd position?
+
+00:01:48.239 --> 00:01:57.739
+No number of additions will do it. Even plus even is still even. Zero and two each keep probability one half. Repetition cannot remove this restriction.
+
+00:01:58.289 --> 00:02:07.339
+The useful questions are about structure. What did the original observation preserve? What does independent addition change, and what does it leave behind?
+
+00:02:07.889 --> 00:02:16.959
+This is an example about probability distributions on four points. It does not establish convergence or threshold theorems for general ergodic systems.
+
+00:02:17.119 --> 00:02:21.129
+The companion page gives the full calculation and the limits of the argument.

@@ -1,0 +1,8 @@
+'use strict';
+(()=>{
+ const opts={delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],throwOnError:true,strict:'error',trust:false,ignoredTags:['script','noscript','style','textarea','pre','code','option','svg'],ignoredClasses:['katex','katex-display','math-no-render']};
+ function render(root=document.body){if(!root||typeof renderMathInElement!=='function')return;try{renderMathInElement(root,opts);for(const math of root.querySelectorAll('.katex')){math.setAttribute('translate','no');math.classList.add('notranslate');}root.dataset.mathReady='true';}catch(error){root.dataset.mathError=String(error);console.error('Math rendering failed',error);}}
+ window.MathNotes={render,setText(el,text){if(!el)return;el.textContent=text;render(el);}};
+ function init(){render(document.body);const pending=new Set();let queued=false;const flush=()=>{queued=false;for(const el of pending)render(el);pending.clear();};const inspect=node=>{if(node.nodeType===3&&/\\[\[(]/.test(node.textContent||'')){const el=node.parentElement;if(el&&!el.closest('script,style,textarea,pre,code,svg,.katex,.katex-display'))pending.add(el);}else if(node.nodeType===1&&!node.matches('script,style,textarea,pre,code,svg,.katex,.katex-display'))for(const child of node.childNodes)inspect(child);};new MutationObserver(mutations=>{for(const m of mutations){if(m.type==='characterData')inspect(m.target);else for(const n of m.addedNodes)inspect(n);}if(pending.size&&!queued){queued=true;requestAnimationFrame(flush);}}).observe(document.body,{childList:true,subtree:true,characterData:true});}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
