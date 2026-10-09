@@ -65,3 +65,6 @@ html[lang="en"] #home #brandLabel,html[lang="en"] .dialog.hero h1{font-family:Ge
   #app #bar .level-ident{position:absolute;right:12px;top:1px;padding:0 3px;line-height:1.2}
   #bar nav{transform:translateY(2px)}
 }
+
+/* The night scene keeps a stable paper ground behind the wordmark only. */
+#app[data-scene-tone="night"] #brandLabel{color:#173e43;background:#faf6ea;border-radius:3px;box-shadow:0 0 0 2px #faf6ea}
