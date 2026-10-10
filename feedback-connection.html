@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src https://understanding-math.lijieokok.chatgpt.site; base-uri 'none'; form-action 'none'">
+<title>建议服务连接检测 · Feedback connection check</title>
+<style>body{max-width:44rem;margin:3rem auto;padding:0 1.3rem;font:17px/1.7 system-ui,sans-serif;background:#faf9f5;color:#252b2a}h1{font-size:1.6rem;line-height:1.4}button{font:inherit;padding:.7rem 1.1rem;border:1px solid #375b51;border-radius:.5rem;background:#e6f0eb;color:#163f31;cursor:pointer}button:disabled{opacity:.6;cursor:wait}#result{white-space:pre-wrap;overflow-wrap:anywhere;padding:1rem;background:#edf0eb;border-radius:.5rem}small{display:block;color:#505954}a{color:#204e40}</style>
+</head>
+<body>
+<h1>建议服务连接检测<br><span lang="en">Feedback connection check</span></h1>
+<p>此页只检查你的浏览器能否读取公开讨论列表。只有点击按钮才会连接建议服务；不会提交意见、登录或读取私有记录。结果只显示连接状态与条数，不显示讨论正文。</p>
+<p lang="en">This checks whether your browser can read the public discussion list. It connects only when you press the button. It does not submit suggestions, sign in, or read private records. Results show the connection status and count, never discussion text.</p>
+<button id="check" type="button">检查连接 / Check connection</button>
+<p id="result" role="status" aria-live="polite">尚未检测 / Not checked.</p>
+<small>最长等待 15 秒。失败结果不能单独区分网络、浏览器扩展、跨站访问或服务错误。<br><span lang="en">The check waits up to 15 seconds. A failed request alone cannot distinguish network, browser-extension, cross-origin, or service problems.</span></small>
+<p><a href="./">返回本站 / Back to the site</a></p>
+<script>
+'use strict';
+const button=document.getElementById('check'),result=document.getElementById('result');
+const endpoint='https://understanding-math.lijieokok.chatgpt.site/api/annotations?docId=popular&lang=zh-CN';
+let busy=false;
+function validList(data){return !!data&&typeof data==='object'&&!Array.isArray(data)&&Array.isArray(data.items)&&data.items.length<=50&&(data.nextCursor==null||(typeof data.nextCursor==='string'&&data.nextCursor.length>0&&data.nextCursor.length<=2048))&&data.items.every(item=>item&&typeof item==='object'&&!Array.isArray(item)&&item.visibility==='approved'&&typeof item.id==='string'&&item.id.length>0&&item.anchor?.docId==='popular'&&item.anchor?.lang==='zh-CN');}
+button.addEventListener('click',async()=>{
+ if(busy)return;busy=true;button.disabled=true;result.textContent='正在检查公开列表… / Checking the public list…';
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
+ try{
+  const response=await fetch(endpoint,{method:'GET',headers:{'X-Annotation-Request':'1'},credentials:'omit',redirect:'error',referrerPolicy:'no-referrer',cache:'no-store',signal:controller.signal});
+  if(response.status!==200){result.textContent=`连接未通过：HTTP ${response.status}。未提交任何意见。\nCheck failed: HTTP ${response.status}. No suggestion was submitted.`;return;}
+  const data=await response.json().catch(()=>null);
+  if(!validList(data)){result.textContent='连接未通过：返回的数据格式不符合公开列表约定。未提交任何意见。\nCheck failed: unexpected public-list response. No suggestion was submitted.';return;}
+  result.textContent=`连接成功：HTTP 200，本页公开记录 ${data.items.length} 条${data.nextCursor?'（还有后续页）':''}。未提交任何意见。\nConnected: HTTP 200, ${data.items.length} public records on this page${data.nextCursor?' (more pages available)':''}. No suggestion was submitted.`;
+ }catch(error){result.textContent=error?.name==='AbortError'?'检查超时（15 秒）。未提交任何意见。\nCheck timed out after 15 seconds. No suggestion was submitted.':'连接失败：浏览器未取得可读取的响应。未提交任何意见。\nConnection failed: the browser could not read a response. No suggestion was submitted.';}
+ finally{clearTimeout(timer);busy=false;button.disabled=false;}
+});
+</script>
+</body></html>
