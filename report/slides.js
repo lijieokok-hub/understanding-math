@@ -621,3 +621,6 @@
     getState: () => ({ ...snapshot(), presenter, connected, hasLostConnection, total, mainCount, faceCount: faces.reduce((sum, group) => sum + group.length, 0) })
   });
 })();
+
+/* Isolated, first-party page-view counter. Never runs inside report frames. */
+(() => { try { if (window.__OFFLINE_MATH__ || location.origin !== 'https://lijieokok-hub.github.io' || !location.pathname.startsWith('/understanding-math/') || window.top !== window.self || document.querySelector('script[data-site-views]')) return; const s = document.createElement('script'); s.dataset.siteViews = ''; s.src = '/understanding-math/visitor-count.js'; s.async = true; document.head.append(s); } catch {} })();
