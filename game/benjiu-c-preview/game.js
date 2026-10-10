@@ -34,7 +34,18 @@ const params=new URLSearchParams(location.search),qa=params.get('qa')==='1';
 let cMode;try{cMode=await createCMode(params);}catch(error){$('#loading').hidden=true;$('#webglError').hidden=false;const en=initialLanguage()===1;$('#webglError h1').textContent=en?'Preview could not load':'试玩未能加载';$('#webglError p').textContent=en?'Please reload this page. You can still play the original game from the preview options.':'请重新打开页面。也可以返回试玩选项，继续玩原版游戏。';$('#webglError a').textContent=en?'Back to preview options':'返回试玩选项';$('#webglError a').href=en?'en.html':'./';throw error;}
 function playerBodyAt(...args){return cMode.resizeBody(bodyAt(...args));}
 function scalePlayer(body,scale){setScale(body,scale);cMode.resizeBody(body);}
-function haltCMode(){if(!cMode.failed)return;mode='dialog';currentDialog='c-error';clearKeys();accumulator=0;$('#dialogHost').innerHTML=`<section class="dialog" role="alertdialog" aria-modal="true" tabindex="-1"><h2>${tx('试玩已暂停','Preview stopped')}</h2><p>${tx('角色显示遇到了问题。刷新页面可以重新开始。试玩进度只在当前页面里，刷新或关闭就会清除。','The bird could not be displayed safely. Reload to start again. Preview progress lasts only in this page and clears when you reload or close it.')}</p><a href="${lang?'en.html':'./'}">${tx('返回试玩选项','Back to preview options')}</a></section>`;$('#dialogHost .dialog')?.focus();}
+function haltCMode(){
+ if(!cMode.failed)return;mode='dialog';currentDialog='c-error';clearKeys();accumulator=0;
+ const failure=cMode.failed,code=failure.code==='draw-exception'?(failure.message==='Severe pose/body disagreement'?'C-DRAW-BOUNDS':failure.message==='Severe visible solid overlap'?'C-DRAW-SOLID':'C-DRAW'):(new Map([['physics-exception','C-PHYS'],['pose-exception','C-POSE'],['render-exception','C-RENDER']]).get(failure.code)||'C-OTHER');
+ const key=code+':'+lang,previous=$('#dialogHost [data-c-error]');if(previous?.dataset.cError===key)return;
+ let level=null;try{if(Number.isInteger(levelIndex)&&levelIndex>=0)level=levelIndex+1;}catch{}
+ const snapshot={code,level},finite=value=>Number.isFinite(value)?value:null;
+ try{const status=cMode.status;Object.assign(snapshot,{epoch:finite(status.epoch),tick:finite(status.tick)});}catch{}
+ try{Object.assign(snapshot,{x:finite(p.x),y:finite(p.y),vx:finite(p.vx),vy:finite(p.vy),scale:finite(p.scale),facing:finite(p.facing)});}catch{}
+ try{app.dataset.cPreviewFailure=JSON.stringify(snapshot);}catch{}
+ $('#dialogHost').innerHTML=`<section class="dialog" data-c-error="${key}" role="alertdialog" aria-modal="true" tabindex="-1"><h2>${tx('试玩已暂停','Preview stopped')}</h2><p>${tx('角色显示遇到了问题。刷新页面可以重新开始。试玩进度只在当前页面里，刷新或关闭就会清除。','The bird could not be displayed safely. Reload to start again. Preview progress lasts only in this page and clears when you reload or close it.')}</p><p>${tx('错误码','Error code')}：${code} · ${tx('关卡','Level')} ${level??'?'}</p><button type="button" data-c-reload>${tx('刷新并重新开始','Reload and start again')}</button> <a href="${lang?'en.html':'./'}">${tx('返回试玩选项','Back to preview options')}</a></section>`;
+ $('#dialogHost [data-c-reload]').onclick=()=>location.reload();if(!previous)$('#dialogHost .dialog')?.focus();
+}
 function refreshCPreviewCopy(){if(cMode.enabled&&renderer?.badge)renderer.badge.textContent=tx('新形象试玩 · 进度仅本页','New bird preview · progress lasts only in this page');}
 
 function sampleCMode(facts){if(cMode.enabled&&!cMode.sample({...facts,platforms:physicalPlatforms()}))haltCMode();}
