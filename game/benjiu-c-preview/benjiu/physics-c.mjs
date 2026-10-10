@@ -31,7 +31,14 @@ export function stepCBody(p,input,platforms,dt,extra={},visual,boundaries){
  if(input.jumpReleased&&p.vy>3.2*unit)p.vy*=.52;
  const target=(input.axis||0)*cfg.maxSpeed*unit,force=extra.airForces;
  if(force&&!p.grounded){const ax=force.steer*(input.axis||0)-force.drag*p.vx+force.x;p.vx+=ax*dt;extra.onAcceleration?.({x:ax,y:force.y-cfg.gravity});}else p.vx=approach(p.vx,target,dt*(input.axis?(p.grounded?cfg.accel:cfg.airAccel):cfg.friction));
- if(input.axis)p.facing=input.axis>0?1:-1;
+ const facing=input.axis?(input.axis>0?1:-1):p.facing,priorFacing=visual.visual?.body?.facing??p.facing;
+ if(facing!==priorFacing){
+  // Mirroring is a shape change, not travel. Use the last committed facing so
+  // mechanism-provided facing changes also share this render/collision gate.
+  // Input acceleration and subsequent physical travel still proceed normally.
+  const turned={...p,facing},blocked=layers=>platforms.some(f=>shapeOverlaps(turned,f,layers,boundaries));
+  p.facing=!blocked(visual.layers)&&!blocked(visual.predict(turned,dt,{...extra.visualFacts,animationVX:p.vx+(extra.wind||0)}).layers)?facing:priorFacing;
+ }else p.facing=priorFacing;
  if(p.on&&p.on.active!==false&&!jumped){p.x+=(p.on.dx||0);p.y+=(p.on.dy||0);}
  p.vy+=(force&&!p.grounded?force.y-cfg.gravity:-cfg.gravity)*dt;p.x+=p.vx*dt+(extra.wind||0)*dt;
  const prediction=()=>visual.predict(p,dt,{...extra.visualFacts,animationVX:p.vx+(extra.wind||0),...(p.landed?{landing:{incomingVY:before.vy,scaleAtImpact:before.scale}}:{})});let pose=null;const getPose=()=>pose??=prediction();
@@ -60,8 +67,13 @@ export function stepCBody(p,input,platforms,dt,extra={},visual,boundaries){
  let selected=null;
  if(p.vy>0)for(const f of platforms){if(f.active===false||!f.solid||!horizontal(p,f)||p.y+p.h<bottom(f)-E||oldY>=f.y-E)continue;const hit=upperContact(visual.layers,pose.layers,boundaries,before,p,f);if(hit&&!hit.preexisting&&(!selected||hit.footY<selected.hit.footY))selected={f,hit};}
  let constrained=false,contacts=[];
- if(selected){const {f,hit}=selected,anchor=hit.useCurrent?null:pose;p.vy=0;let final=prediction();final=visual.constrainHead(final,anchor);const support=topSupport(final.layers,boundaries,p,f.x-f.w/2,f.x+f.w/2);p.y=bottom(f)-support.height;pose=final;constrained=true;
-  const head=topSupport(pose.layers,boundaries,p,f.x-f.w/2,f.x+f.w/2,{headOnly:true});contacts.push({platform:f,head:!!head&&Math.abs(head.height-support.height)<E,witness:{x:support.x,y:bottom(f),part:support.part},blankBox:false,finalHeadGap:head?bottom(f)-p.y-head.height:null});
+ if(selected){const {f,hit}=selected,anchor=hit.useCurrent?null:pose,incomingVY=p.vy;p.vy=0;let final=prediction();final=visual.constrainHead(final,anchor);const support=topSupport(final.layers,boundaries,p,f.x-f.w/2,f.x+f.w/2);
+  // A candidate at a platform lip can disappear after constraining the final
+  // pose. Commit a head stop only when that final pose still has a witness;
+  // otherwise preserve travel and let the ordinary blocker clip run below.
+  if(support){p.y=bottom(f)-support.height;pose=final;constrained=true;
+   const head=topSupport(pose.layers,boundaries,p,f.x-f.w/2,f.x+f.w/2,{headOnly:true});contacts.push({platform:f,head:!!head&&Math.abs(head.height-support.height)<E,witness:{x:support.x,y:bottom(f),part:support.part},blankBox:false,finalHeadGap:head?bottom(f)-p.y-head.height:null});
+  }else p.vy=incomingVY;
  }
  const bad=layers=>platforms.filter(f=>shapeOverlaps(p,f,layers,boundaries));let blockers=bad(pose.layers);
  if(blockers.length){const held=visual.constrainHead(pose);if(!bad(held.layers).length){pose=held;constrained=true;blockers=[];}}
