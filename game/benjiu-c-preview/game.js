@@ -38,8 +38,8 @@ function haltCMode(){
  if(!cMode.failed)return;mode='dialog';currentDialog='c-error';clearKeys();accumulator=0;
  const failure=cMode.failed,code=failure.code==='draw-exception'?(failure.message==='Severe pose/body disagreement'?'C-DRAW-BOUNDS':failure.message==='Severe visible solid overlap'?'C-DRAW-SOLID':'C-DRAW'):(new Map([['physics-exception','C-PHYS'],['pose-exception','C-POSE'],['render-exception','C-RENDER']]).get(failure.code)||'C-OTHER');
  const key=code+':'+lang,previous=$('#dialogHost [data-c-error]');if(previous?.dataset.cError===key)return;
- let level=null;try{if(Number.isInteger(levelIndex)&&levelIndex>=0)level=levelIndex+1;}catch{}
- const snapshot={code,level},finite=value=>Number.isFinite(value)?value:null;
+ let level=null,runtime=null;try{if(Number.isInteger(levelIndex)&&levelIndex>=0){runtime=levelIndex;const chapter=chapterForRuntime(runtime)?.chapter;if(Number.isInteger(chapter)&&chapter>0)level=chapter;}}catch{}
+ const snapshot={code,level,runtime},finite=value=>Number.isFinite(value)?value:null;
  try{const status=cMode.status;Object.assign(snapshot,{epoch:finite(status.epoch),tick:finite(status.tick)});}catch{}
  try{Object.assign(snapshot,{x:finite(p.x),y:finite(p.y),vx:finite(p.vx),vy:finite(p.vy),scale:finite(p.scale),facing:finite(p.facing)});}catch{}
  try{app.dataset.cPreviewFailure=JSON.stringify(snapshot);}catch{}
