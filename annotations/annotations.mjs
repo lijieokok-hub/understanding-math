@@ -1,16 +1,17 @@
 import {captureSelection, canonicalize, reanchor, rangeForOffsets} from './anchor.mjs';
 import {getStrings, errorText, codedError} from './locales.mjs';
+import {API_URL, publicRevisionHref, validatePublicPage} from './public-contract.mjs';
 const el = (doc, tag, text, className) => { const node = doc.createElement(tag); if (text !== undefined) node.textContent = text; if (className) node.className = className; return node; };
-export function createHttpTransport(base = '/api/annotations', {locale = globalThis.document?.documentElement.lang || 'zh'} = {}) {
+export function createHttpTransport(base = API_URL, {locale = globalThis.document?.documentElement.lang || 'zh'} = {}) {
   const t = getStrings(locale);
   const url = new URL(base, globalThis.location.href);
-  if (url.origin !== globalThis.location.origin || url.search || url.hash) throw codedError('UNSAFE_API_URL', t.errors.UNSAFE_API_URL);
+  if (url.href !== API_URL) throw codedError('UNSAFE_API_URL', t.errors.UNSAFE_API_URL);
   async function request(suffix, options = {}) {
     const controller = new AbortController(), timeout = setTimeout(() => controller.abort(), 15000);
     try {
-      const response = await fetch(url.href + suffix, {credentials: 'same-origin', redirect: 'error', ...options, signal: controller.signal});
+      const response = await fetch(url.href + suffix, {...options, credentials: 'omit', redirect: 'error', referrerPolicy: 'no-referrer', signal: controller.signal});
       const data = await response.json().catch(() => null);
-      if (!response.ok) throw codedError(data?.code || 'NETWORK_ERROR', t.locale === 'en' ? (t.errors[data?.code] || t.errors.NETWORK_ERROR) : (data?.message || t.errors.NETWORK_ERROR));
+      if (!response.ok) throw codedError(data?.code || 'NETWORK_ERROR', t.errors[data?.code] || t.errors.NETWORK_ERROR);
       return data;
     } catch (error) {
       if (error.name === 'AbortError') throw codedError('TIMEOUT', t.errors.TIMEOUT);
@@ -20,14 +21,14 @@ export function createHttpTransport(base = '/api/annotations', {locale = globalT
   return {
     async submit(payload) {
       const data = await request('', {method: 'POST', headers: {'Content-Type': 'application/json', 'X-Annotation-Request': '1'}, body: JSON.stringify(payload)});
-      if (data?.stored !== true || data.visibility !== 'private' || data.status !== 'pending' || typeof data.id !== 'string') throw codedError('BAD_RESPONSE', t.errors.BAD_RESPONSE);
+      if (data?.stored !== true || data.visibility !== 'private' || data.status !== 'pending' || typeof data.id !== 'string' || !data.id.trim()) throw codedError('BAD_RESPONSE', t.errors.BAD_RESPONSE);
       return data;
     },
-    async list(docId, lang, cursor=null) { const data = await request(`?docId=${encodeURIComponent(docId)}&lang=${encodeURIComponent(lang)}${cursor?'&cursor='+encodeURIComponent(cursor):''}`); if (!Array.isArray(data?.items)||(data.nextCursor!=null&&typeof data.nextCursor!=='string')) throw codedError('BAD_LIST', t.errors.BAD_LIST); return {items:data.items,nextCursor:data.nextCursor||null}; }
+    async list(docId, lang, cursor=null) { const data = await request(`?docId=${encodeURIComponent(docId)}&lang=${encodeURIComponent(lang)}${cursor?'&cursor='+encodeURIComponent(cursor):''}`); if (!validatePublicPage(data, docId, lang)) throw codedError('BAD_LIST', t.errors.BAD_LIST); return {items:data.items,nextCursor:data.nextCursor||null}; }
   };
 }
 /** A small native-DOM component. No localStorage, telemetry, HTML interpolation or author controls. */
-export function mountAnnotations({root, panel, transport = null, locale, feedbackUrl = null}) {
+export function mountAnnotations({root, panel, transport = null, locale}) {
   const t = getStrings(locale || root?.dataset.docLang || root?.lang || root?.ownerDocument.documentElement.lang);
   if (!root || !panel) throw codedError('ROOT_REQUIRED', t.errors.ROOT_REQUIRED);
   for (const key of ['docId', 'docVersion']) if (!root.dataset[key]) throw codedError('META_REQUIRED', t.errors.META_REQUIRED);
@@ -45,21 +46,9 @@ export function mountAnnotations({root, panel, transport = null, locale, feedbac
   const textarea = el(doc, 'textarea'); textarea.rows = 5; textarea.maxLength = 4000; textarea.required = true; textarea.name = 'comment'; label.append(textarea);
   const privacy = el(doc, 'p', t.privacy, 'annotation-help');
   const serviceNote = el(doc, 'p', transport ? '' : t.offlineEditor, 'annotation-help');
-  const english=(locale||root.dataset.docLang||'').startsWith('en');
-  let feedbackLink=null;
-  if(feedbackUrl){
-    const target=new URL(feedbackUrl);
-    if(target.origin!=='https://understanding-math.lijieokok.chatgpt.site'||target.search||target.hash)throw new Error('Invalid feedback destination');
-    feedbackLink=el(doc,'a',english?'Open this section on the original site':'到原站本节提交建议');
-    feedbackLink.href=feedbackUrl;feedbackLink.target='_blank';feedbackLink.rel='noopener noreferrer';
-    label.hidden=true;
-    privacy.textContent=english?'Suggestions and discussions are hosted on the original site. This static edition does not submit or save notes.':'建议与讨论保留在原站。本静态站点不会提交或保存建议。';
-    serviceNote.textContent=english?'The link opens the same section in this language. Select the passage again there to submit your suggestion. No selected text is sent by this link.':'链接会打开同语种的原文小节。请在那里重新选取段落后提交建议；链接不会传送这里选中的文字。';
-    serviceNote.append(feedbackLink);
-  }
   const status = el(doc, 'p', ''); status.setAttribute('role', 'status'); status.setAttribute('aria-live', 'polite');
   const actions = el(doc, 'div', undefined, 'annotation-actions'), cancel = el(doc, 'button', t.close), submit = el(doc, 'button', t.save);
-  cancel.type = submit.type = 'button'; submit.disabled = !transport; actions.append(cancel); if(!feedbackLink)actions.append(submit);
+  cancel.type = submit.type = 'button'; submit.disabled = !transport; actions.append(cancel, submit);
   dialog.append(title, location, quote, label, privacy, serviceNote, status, actions);
   const host = el(doc, 'div', undefined, 'annotation-ui'); host.dataset.annotationIgnore = ''; host.append(button, menu, dialog, live); doc.body.append(host);
   let current = null, active = null, returnFocus = null, saving = false, destroyed = false, suppressed = false, listEpoch = 0;
@@ -83,18 +72,15 @@ export function mountAnnotations({root, panel, transport = null, locale, feedbac
     location.textContent = t.location(active);
     quote.textContent = active.quote.exact; win.MathNotes?.render(quote);
     textarea.value = drafts.get(keyOf(active)) || ''; status.textContent = ''; textarea.disabled = false; submit.disabled = !transport;
-    if(feedbackLink){
-      const section=[...root.querySelectorAll('[data-annotation-section]')].find(s=>s.dataset.annotationSection===active.sectionId);
-      const target=new URL(feedbackUrl);target.hash=section?.id||'';feedbackLink.href=target.href;
-    }
-    dialog.showModal(); (feedbackLink||textarea).focus();
+    dialog.showModal(); textarea.focus();
   }
   function closeEditor() {
     if (saving) {status.textContent = t.waiting; return;}
     if (active && textarea.value) drafts.set(keyOf(active), textarea.value);
     dialog.close(); active = null; suppressed = true; hideMenu(true);
   }
-  on(textarea, 'input', () => {if (active) drafts.set(keyOf(active), textarea.value);});
+  on(textarea, 'input', () => {if (active) {if(textarea.value) drafts.set(keyOf(active), textarea.value); else drafts.delete(keyOf(active));}});
+  on(win, 'beforeunload', event => {if(saving || textarea.value || drafts.size){event.preventDefault(); event.returnValue='';}});
   on(button, 'pointerdown', e => e.preventDefault());
   on(menuButton, 'pointerdown', e => e.preventDefault());
   on(button, 'click', () => openEditor()); on(menuButton, 'click', () => openEditor());
@@ -104,13 +90,14 @@ export function mountAnnotations({root, panel, transport = null, locale, feedbac
     if (saving || !active || !transport) return;
     const originalText = textarea.value;
     if (!originalText.trim()) {status.textContent = t.empty; textarea.focus(); return;}
+    drafts.set(keyOf(active), originalText);
     saving = true; submit.disabled = true; textarea.disabled = true; cancel.disabled = true;
     status.textContent = t.saving;
     try {
       const fingerprint = keyOf(active) + '\n' + originalText;
       if (!requestKeys.has(fingerprint)) requestKeys.set(fingerprint, crypto.randomUUID());
       const receipt = await transport.submit({anchor: active, body: originalText, requestKey: requestKeys.get(fingerprint)});
-      if (receipt?.stored !== true || receipt.visibility !== 'private' || receipt.status !== 'pending') throw codedError('BAD_RESPONSE', t.errors.BAD_RESPONSE);
+      if (receipt?.stored !== true || receipt.visibility !== 'private' || receipt.status !== 'pending' || typeof receipt.id !== 'string' || !receipt.id) throw codedError('BAD_RESPONSE', t.errors.BAD_RESPONSE);
       drafts.delete(keyOf(active)); textarea.value = ''; dialog.close(); active = null; suppressed = true;
       live.textContent = t.saved; hideMenu(true);
     } catch (error) {status.textContent = `${errorText(error, t)} ${t.retained}`;}
@@ -156,14 +143,7 @@ export function mountAnnotations({root, panel, transport = null, locale, feedbac
   }
   async function refresh() {
     const epoch=++listEpoch;panel.replaceChildren();panel.append(el(doc,'h2',t.discussion));shown.clear();nextPage=null;pageBusy=false;
-    if(!transport){
-      if(feedbackLink){
-        panel.append(el(doc,'p',english?'Suggestions and discussions remain on the original site; this static edition does not submit or synchronize them.':'建议和讨论保留在原站；本静态站点不会提交或同步这些内容。'));
-        const link=el(doc,'a',english?'Read discussions or send a suggestion on the original site':'到原站查看讨论或提交建议');
-        const target=new URL(feedbackUrl);target.hash='article-discussion';link.href=target.href;link.target='_blank';link.rel='noopener noreferrer';panel.append(link);
-      }else panel.append(el(doc,'p',t.offlineDiscussion));
-      return;
-    }
+    if(!transport){panel.append(el(doc,'p',t.offlineDiscussion));return}
     listTail=el(doc,'div',undefined,'annotation-pages');pageStatus=el(doc,'p');pageStatus.setAttribute('role','status');
     moreButton=el(doc,'button',t.more);moreButton.type='button';moreButton.hidden=true;
     on(moreButton,'click',()=>{if(nextPage)loadPage(nextPage,listEpoch)});listTail.append(pageStatus,moreButton);panel.append(listTail);
@@ -184,8 +164,9 @@ export function mountAnnotations({root, panel, transport = null, locale, feedbac
       if (event.reply) card.append(el(doc, 'p', t.authorReply + event.reply));
       if (event.revision) { const row = el(doc, 'p', `${t.revision}${event.revision.version} `);
         // Links originate from server-registered relative paths; revalidate before assigning href.
-        if (/^\/[a-zA-Z0-9/_\-.]+(?:#[a-zA-Z0-9_\-]+)?$/.test(event.revision.path) && !event.revision.path.startsWith('//')) {
-          const link = el(doc, 'a', t.viewRevision); link.href = event.revision.path; row.append(link);
+        const href = publicRevisionHref(event.revision.path);
+        if (href) {
+          const link = el(doc, 'a', t.viewRevision); link.href = href; row.append(link);
         } card.append(row); }
     }
     if(listTail)panel.insertBefore(card,listTail);else panel.append(card); win.MathNotes?.render(card);
