@@ -1,3 +1,4 @@
+import {controlLayout} from './benjiu/c-control-layout.mjs';
 // A bounded, explicit force model. Arrows represent accelerations, not velocities.
 export const WIND_X=[0,8,-8],WIND_Y=[0,16,-8],WIND_DRAG=2.4,WIND_STEER=12;
 export function vectorSum(a,b){return {x:a.x+b.x,y:a.y+b.y};}
@@ -26,7 +27,7 @@ export function buildVector(a){const {state,platform,box,label,feather,checkpoin
  platform(16,0,12,{h:2});platform(33,-3.5,44,{h:.75,color:0xc0d4cd});platform(25.2,-1.8,6.4);platform(38,-1.8,5.6);platform(57,-1.7,4,{h:.65});platform(69,0,14,{h:3,pillar:true});
  s.rest=platform(28,-.2,5.6,{oneWay:true,h:.18,color:0xbad4cc,vectorRest:true});label(()=>tx('中间也能歇脚','A place to catch your breath'),28,1.35,{w:10,font:25});
  s.perches=[platform(44,.6,24,{h:.5,color:0xe2d19d,vectorArrival:0}),platform(23,3.8,14,{oneWay:true,h:.18,color:0xc1d8cc,vectorArrival:1})];checkpointAt(39,.6);
- for(const [x,y,axis] of [[13,3.1,'x'],[15.5,3.1,'y'],[40.5,3.7,'x'],[43,3.7,'y']]){const f=platform(x,y,1.8,{h:.65,solid:true,color:axis==='x'?0xa5c9c7:0xd9c590,vectorControl:axis});s.controls.push(f);label(axis==='x'?'↔':'↕',x,y-.26,{w:2.7,font:90,z:1.11});s.labels.push(label(()=>{const value=axis==='x'?WIND_X[s.ix]:WIND_Y[s.iy];return value===0?'0':axis==='x'?(value>0?'→':'←'):(value>0?'↑':'↓');},x,y+.9,{w:4.4,font:90,bold:true}));}
+ for(const [x,y,axis] of controlLayout(a.cMode===true)){const f=platform(x,y,1.8,{h:.65,solid:true,color:axis==='x'?0xa5c9c7:0xd9c590,vectorControl:axis});s.controls.push(f);label(axis==='x'?'↔':'↕',x,y-.26,{w:2.7,font:90,z:1.11});s.labels.push(label(()=>{const value=axis==='x'?WIND_X[s.ix]:WIND_Y[s.iy];return value===0?'0':axis==='x'?(value>0?'→':'←'):(value>0?'↑':'↓');},x,y+.9,{w:4.4,font:90,bold:true}));}
  s.labels.push(label(()=>s.arrivals[0]?tx('到了 ✓','Landed ✓'):tx('1. 先到这边 →','1. First landing →'),35.5,2.5,{w:9,font:30}));s.labels.push(label(()=>s.arrivals[1]?tx('回来了 ✓','Back again ✓'):s.arrivals[0]?tx('2. 换成 ←，飞回来','2. Set ←, then fly back'):tx('回来时落在这里','Land here on the way back'),23,5.8,{w:12,font:30}));
  s.labels.push(label(()=>s.arrivals[0]&&!s.arrivals[1]?(s.ix===2&&s.iy===1?tx('← 就这样，飞回上层','← Ready. Fly back to the upper ledge.'):tx('← 上托不变，横风朝左','← Keep ↑. Turn the crosswind left.')):'',43,6.0,{w:13,font:28}));
  label(()=>tx('起飞 →','Take off →'),20.5,1.15,{w:5,font:30});

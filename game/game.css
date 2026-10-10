@@ -68,3 +68,6 @@ html[lang="en"] #home #brandLabel,html[lang="en"] .dialog.hero h1{font-family:Ge
 
 /* The night scene keeps a stable paper ground behind the wordmark only. */
 #app[data-scene-tone="night"] #brandLabel{color:#173e43;background:#faf6ea;border-radius:3px;box-shadow:0 0 0 2px #faf6ea}
+
+/* One shared Bert identity, with no enclosing badge. */
+.menu-bert{display:block;width:clamp(145px,22vw,245px);max-height:30vh;height:auto;object-fit:contain;margin:0 auto .2rem}.hero h1{margin-top:0}.brand .game-brand-mark{width:48px;height:46px;object-fit:contain}.loading-bird .game-brand-mark{width:92px;height:88px;object-fit:contain}#compatBadge{display:none}

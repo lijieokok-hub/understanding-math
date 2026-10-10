@@ -55,3 +55,8 @@ export function importProgress(text,current){
  if(raw?.format!=='bird-math-adventure-save'||!isV2(raw))throw new Error('Unsupported save file');
  return mergeProgress(current,raw);
 }
+
+export const PRE_FLUFFY_BACKUP_KEY='birdMathAdventureProgressV2BeforeFluffy';
+export function backupPreviousProgress(storage){
+ try{const current=storage.getItem(PROGRESS_KEY);if(current!==null&&storage.getItem(PRE_FLUFFY_BACKUP_KEY)===null)storage.setItem(PRE_FLUFFY_BACKUP_KEY,current);return true;}catch{return false;}
+}

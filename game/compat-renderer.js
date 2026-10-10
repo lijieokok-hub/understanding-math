@@ -1,12 +1,11 @@
+import {PROJECTION_X_RATIO} from './benjiu/alpha-contact.mjs';
+import {withCanvasScope} from './benjiu/canvas-scope.mjs';
 import {shadowContactBody,UPPER_LANE_BOTTOM} from './shadow-track.mjs';
 import {platformSupport} from './platform-collision.mjs';
-import {drawVector} from './vector-world.js';
+import {drawVector} from './vector-world.js?v=fluffy-20261010';
 import {drawPermutation} from './permutation-world.js';
 /** Canvas presentation adapter. All simulation, colliders, input and level rules remain in game.js/physics.mjs. */
 import {Vector3,Color} from './vendor/three.module.js';
-import {BIRD_ATLAS} from './art/bird-atlas-meta.js';
-import {createCrestCanvasRenderer} from './bird-crest/crest-canvas.js';
-import {CREST_ATLAS} from './bird-crest/atlas/crest-atlas-meta.js';
 import {brushOutline,INK_COLOR} from './brush-art.mjs';
 import {contour,worldPalette,sceneryInlays,sceneryFeatures} from './world-art.mjs';
 import {drawAnalysisWorld} from './analysis-worlds.js';
@@ -20,15 +19,15 @@ import {birdContactPose,wrapBirdDomain} from './bird-contact.mjs';
 const css=n=>'#'+new Color(n).getHexString();
 export class CompatibilityRenderer {
  constructor({getState,getLanguage}){
-  this.getState=getState;this.getLanguage=getLanguage;this.domElement=document.createElement('canvas');this.ctx=this.domElement.getContext('2d',{alpha:false});if(!this.ctx)throw new Error('Canvas 2D is unavailable');this.shadowMap={};this.ratio=1;this.width=innerWidth;this.height=innerHeight;this.point=new Vector3();this.platformCache=new Map();this.inkCache=new Map();this.clockCache=new Map();this.textCache=new Map();this.sceneKey=null;this.atlas=new Image();this.atlas.src=new URL('art/bird-atlas.png',document.baseURI).href;this.logo=new Image();this.logo.src=new URL('favicon.svg',document.baseURI).href;this.meta=BIRD_ATLAS;this.crestBody=new Image();this.crestBody.src=new URL('bird-crest/atlas/body-atlas.png',document.baseURI).href;this.crestImage=new Image();this.crestImage.src=new URL('bird-crest/atlas/crest-atlas.png',document.baseURI).href;this.crestDrawing=createCrestCanvasRenderer({bodyImage:this.crestBody,crestImage:this.crestImage,meta:CREST_ATLAS});
-  this.badge=document.createElement('div');this.badge.id='compatBadge';this.badge.setAttribute('role','status');document.querySelector('#app').appendChild(this.badge);
+  this.getState=getState;this.getLanguage=getLanguage;this.domElement=document.createElement('canvas');this.ctx=this.domElement.getContext('2d',{alpha:false});if(!this.ctx)throw new Error('Canvas 2D is unavailable');this.shadowMap={};this.ratio=1;this.width=innerWidth;this.height=innerHeight;this.point=new Vector3();this.platformCache=new Map();this.inkCache=new Map();this.clockCache=new Map();this.textCache=new Map();this.sceneKey=null;
+  this.badge=document.createElement('div');this.badge.id='compatBadge';this.badge.hidden=true;this.badge.setAttribute('role','status');document.querySelector('#app').appendChild(this.badge);
  }
  setPixelRatio(v){this.ratio=Math.min(v,1);}
  setSize(w,h){this.width=w;this.height=h;this.domElement.width=Math.round(w*this.ratio);this.domElement.height=Math.round(h*this.ratio);this.domElement.style.width=w+'px';this.domElement.style.height=h+'px';}
  project(x,y,z=0){this.point.set(x,y,z).project(this.camera);return [(this.point.x+1)*this.width/2,(1-this.point.y)*this.height/2];}
  path(points,fill,stroke=null,width=1){const c=this.ctx;c.beginPath();points.forEach((p,i)=>i?c.lineTo(...p):c.moveTo(...p));c.closePath();if(fill){c.fillStyle=fill;c.fill();}if(stroke){c.strokeStyle=stroke;c.lineWidth=width;c.stroke();}}
  render(scene,camera){
-  this.camera=camera;camera.updateMatrixWorld();const g=this.getState();if(!g.L)return;this.occluders=g.collisionPlats||g.plats;this.shadowPlatforms=g.state.shadowSurfaces||[];this.upperLaneBottom=g.L.kind==='shadow'?UPPER_LANE_BOTTOM:null;this.wrapDomain=g.L.kind==='wrap'&&wrapBirdDomain(g.p,g.state.wrap)?g.state.wrap:null;this.reduced=!!g.reduced;this.expression=g.expression;this.night=g.levelIndex===7;const c=this.ctx,w=this.width,h=this.height,night=g.levelIndex===7;c.setTransform(this.ratio,0,0,this.ratio,0,0);c.clearRect(0,0,w,h);this.unit=w/(camera.right-camera.left);const badgeText=this.getLanguage()?'Compatibility view · baked 3D bird':'兼容画面 · 三维小鸟烘焙动画';if(this.badge.textContent!==badgeText)this.badge.textContent=badgeText;
+  this.camera=camera;camera.updateMatrixWorld();const g=this.getState();this.cMode=g.cMode;if(!g.L)return;this.occluders=g.collisionPlats||g.plats;this.shadowPlatforms=g.state.shadowSurfaces||[];this.upperLaneBottom=g.L.kind==='shadow'?UPPER_LANE_BOTTOM:null;this.wrapDomain=g.L.kind==='wrap'&&wrapBirdDomain(g.p,g.state.wrap)?g.state.wrap:null;this.reduced=!!g.reduced;this.expression=g.expression;this.night=g.levelIndex===7;const c=this.ctx,w=this.width,h=this.height,night=g.levelIndex===7;c.setTransform(this.ratio,0,0,this.ratio,0,0);c.clearRect(0,0,w,h);this.unit=w/(camera.right-camera.left);
   const sceneKey=g.levelIndex+'_'+w+'_'+h;if(sceneKey!==this.sceneKey){this.sceneKey=sceneKey;this.platformCache.clear();this.inkCache.clear();this.clockCache.clear();this.textCache.clear();this.prepareBackground(g,night);}if(this.lastPlats!==g.plats||this.lastPlatsLength!==g.plats.length){this.lastPlats=g.plats;this.lastPlatsLength=g.plats.length;this.orderedPlats=[...g.plats].sort((a,b)=>a.y-b.y);}
   c.drawImage(this.sky,0,0);
   for(const layer of this.mountains){const offset=g.reduced?0:-((camera.position.x*layer.par*this.unit)%layer.period);c.drawImage(layer.canvas,offset,0);}
@@ -91,13 +90,19 @@ export class CompatibilityRenderer {
 
  drawLemma(actor,time,reduced){const c=this.ctx,b=actor.body,[x,y]=this.project(b.x,b.y),u=this.unit;if(x<-u||x>this.width+u)return;c.save();c.translate(x,y);if(!reduced)c.rotate(-Math.sin(time*12)*.035);c.fillStyle='#254c4526';c.beginPath();c.ellipse(0,0,u*.43,u*.1,0,0,7);c.fill();const paper=c.createLinearGradient(-u*.3,-u*.73,u*.3,-u*.1);paper.addColorStop(0,'#fff7db');paper.addColorStop(1,'#dacc9e');c.fillStyle=paper;c.fillRect(-u*.31,-u*.7,u*.62,u*.6);c.fillStyle='#bda064';c.fillRect(-u*.34,-u*.74,u*.68,u*.09);c.fillRect(-u*.34,-u*.13,u*.68,u*.09);for(const dx of [-.18,.18]){c.fillStyle='#304b48';c.beginPath();c.arc(u*dx,-u*.42,u*.045,0,7);c.fill();const step=reduced?0:Math.sin(time*12+(dx>0?Math.PI:0))*.045;c.fillStyle='#87683c';c.fillRect(u*(dx-.05),-u*(.06+step),u*.11,u*.1);}c.restore();}
  drawBird(p,time,ghost,contactBody=p){
-  const c=this.ctx;c.save();
-  if(this.wrapDomain){const left=this.project(this.wrapDomain.left,0)[0],right=this.project(this.wrapDomain.right,0)[0];c.beginPath();c.rect(left,0,right-left,this.height);c.clip();}
-  this.clipBirdBehindPlatforms(p,ghost);
-  const body=ghost?shadowContactBody(contactBody,this.shadowPlatforms):contactBody,pose=birdContactPose(body,ghost?this.shadowPlatforms:this.occluders||[]),[x,y]=this.project(p.x,p.y-(ghost?4:0));
-  const projectedY=Math.abs(this.project(p.x,p.y+1)[1]-this.project(p.x,p.y)[1])/this.unit;
-  c.translate(x,y);c.transform(1,0,-pose.lean/Math.max(.1,projectedY),pose.squash,0,0);c.translate(-x,-y);
-  this.drawBirdImage(p,time,ghost);c.restore();
+  if(this.cMode?.enabled){
+   if(this.cMode.failed)return;
+   try{withCanvasScope(this.ctx,c=>{
+    if(this.wrapDomain){const left=this.project(this.wrapDomain.left,0)[0],right=this.project(this.wrapDomain.right,0)[0];c.beginPath();c.rect(left,0,right-left,this.height);c.clip();}
+    this.clipBirdBehindPlatforms(p,ghost);
+    const body={...p,y:p.y-(ghost?4:0)},[x,y]=this.project(body.x,body.y);
+    const spriteUnit=this.unit*PROJECTION_X_RATIO;
+    this.cMode.draw(c,{body,x,y,unit:spriteUnit,platforms:ghost?this.shadowPlatforms:this.occluders||[],clipX:this.wrapDomain});
+   });}catch(error){this.cMode.fail('draw-exception',error);}
+   return; // Active C never falls through to a stale baked bird.
+  }
+  return; // No legacy character fallback.
+
  }
  clipBirdBehindPlatforms(p,ghost){
   const c=this.ctx,feet=p.y-(ghost?4:0),radius=1.4*p.scale,head=feet+1.65*p.scale;
@@ -113,7 +118,4 @@ export class CompatibilityRenderer {
    c.beginPath();c.rect(0,0,this.width,this.height);polygon.forEach((v,i)=>i?c.lineTo(...v):c.moveTo(...v));c.closePath();c.clip('evenodd');
   }
  }
- drawBirdImage(p,time,ghost){const c=this.ctx,[x,y]=this.project(p.x,p.y-(ghost?4:0));const scale=p.scale;if(this.crestDrawing.draw(c,{x,y,unit:this.unit,scale,facing:p.facing,time,reducedMotion:this.reduced,dark:this.night,flying:!p.grounded,speed:Math.abs(p.vx),...this.expression}))return;const anim=p.grounded?(Math.abs(p.vx)>1?'run':'idle'):'flap';c.save();c.translate(x,y);if(p.facing<0)c.scale(-1,1);const meta=this.meta;if(meta&&this.atlas.complete&&this.atlas.naturalWidth){const animation=meta.animations?.[anim]||meta.animations?.idle;const ids=animation?.frames||[0];const index=ids[this.reduced?0:Math.floor(time*(animation?.fps||8))%ids.length];const frame=meta.frames?.[index];const f=Array.isArray(frame)?{x:frame[0],y:frame[1],w:frame[2],h:frame[3]}:frame;if(f){const fw=f.w||f.width||192,fh=f.h||f.height||192;const pivot=meta.pivotPx||[fw*.5,fh*.86];const pixelsPerWorld=meta.pixelsPerWorldUnit||meta.render?.pixelsPerWorldUnit||112;const size=this.unit*scale/pixelsPerWorld;c.drawImage(this.atlas,f.x,f.y,fw,fh,-pivot[0]*size,-pivot[1]*size,fw*size,fh*size);c.restore();return;}}
- // A brand silhouette appears only while the exact-model baked atlas loads.
- if(this.logo.complete&&this.logo.naturalWidth)c.drawImage(this.logo,-this.unit*.75*scale,-this.unit*1.35*scale,this.unit*1.6*scale,this.unit*1.6*scale);c.restore();}
 }
