@@ -1,5 +1,7 @@
 // Read-only guidance derived from actual mechanism state.
-export function currentGoal(kind,state,{lang=0,vectorGoal='',complete=false,size=1}={}){
+// Use the actual reset lens created by this level, not a historical visit count.
+const atResetSection=(state,x,size)=>size===1&&Number.isFinite(x)&&Number.isFinite(state.scaleResetLens?.x)&&Number.isFinite(state.scaleResetLens.touchRadius)&&state.scaleResetLens.touchRadius>=0&&x>=state.scaleResetLens.x-state.scaleResetLens.touchRadius;
+export function currentGoal(kind,state,{lang=0,vectorGoal='',complete=false,size=1,x=null}={}){
  const say=(zh,en)=>lang?en:zh;
  if(complete)return say('本关完成，可以翻到下一页','Chapter done. Choose the next one');
  // Reuse the live wind stage rather than adding a second instruction.
@@ -17,6 +19,7 @@ export function currentGoal(kind,state,{lang=0,vectorGoal='',complete=false,size
   }
   case 'array':if(state.array?.deliveries[0])return state.array.columns===3?say('已经够高了，跳到高收件台','Tall enough. Jump to the high perch'):say('折成三列四行，再到高收件台','Make 3 columns; reach the high perch');break;
   case 'scale':if(state.appendixComplete)return say('两份折页都展开了，前往出口','Both pages open. Head to the exit');
+   if(atResetSection(state,x,size))return state.appendixOpened>0?say('顶开或踩开剩下的折页盒','Bump or land on the remaining folded-page box'):say('向前走，顶开或踩开折页盒','Continue ahead; bump or land on the folded-page boxes');
    if(state.appendixOpened>0)return say('再碰另一份折页，展开剩下的路','Touch the other folded page');
    if(size<1)return say('穿过低洞，再碰放大透镜','Cross the tunnel; use the grow lens');
    if(size>1)return say('沿高台继续，找到还原透镜','Find the reset lens on the high path');
@@ -50,7 +53,7 @@ export function currentGoal(kind,state,{lang=0,vectorGoal='',complete=false,size
 // The pause reminder is selected with the same live state as the short goal.
 // Completed save records and historical lens/landing counters do not locate the bird.
 export function currentGuidance(kind,state,context={}){
- const {lang=0,complete=false,openingHint='',size=1}=context,say=(zh,en)=>lang?en:zh;
+ const {lang=0,complete=false,openingHint='',size=1,x=null}=context,say=(zh,en)=>lang?en:zh;
  const goal=currentGoal(kind,state,context);let controls=openingHint;
  if(complete)controls=say('可以翻到下一关，也可以重新玩这一关。','Choose the next chapter or replay this one.');
  else if(kind==='vector'){
@@ -72,6 +75,7 @@ export function currentGuidance(kind,state,context={}){
   controls=state.appendixComplete?say('两份折页都已展开。沿透镜和平台前往出口，返回书签后仍需按洞口高度调大小。','Both folded pages are open. Follow the lenses and perches to the exit; after returning to a bookmark, adjust your size to fit the tunnel again.'):
    size<1?say('当前已经缩小，可以穿过低洞；碰放大透镜后再登高台。','You are small enough for the low tunnel. Touch the grow lens before climbing the high perches.'):
    size>1?say('当前已经放大。沿高台走到还原透镜，再碰两份折页把路展开。','You are enlarged. Follow the high perches to the reset lens, then touch both folded pages.'):
+   atResetSection(state,x,size)?say('沿前方平台走，从下顶开剩余折页盒，或落到盒子上；两份都展开后去出口。','Follow the platforms ahead. Bump the remaining folded-page boxes from below or land on them; open both, then head to the exit.'):
    say('低洞前碰缩小透镜，高台前碰放大透镜；还原后碰两份折页。R 回书签可能恢复大小，要重新看洞口。','Shrink for the low tunnel, grow for the high perches, then reset and touch both folded pages. Returning to a bookmark may reset your size, so check the tunnel again.');
  }else if(kind==='derivative'){
   controls=say('在当前这段曲线上找向右上方倾斜的箭头。落到它的小踏板，朝右按跳跃，起飞后可按左右微调，落上该段金色收件台。下方可以返回。','On the current curve, find an arrow leaning up and right. Land on its perch and launch right. After take-off, use left and right to adjust and reach that curve’s gold receiving perch. The lower route lets you return.');
