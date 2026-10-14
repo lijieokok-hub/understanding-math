@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "description": "Content planning only; this file is not loaded by public navigation and is not access control. Publish a section only after it has reviewed, public-ready content and an explicit route.",
+  "reservedSections": [
+    {
+      "id": "foundations",
+      "label": "基础内容",
+      "status": "unpublished",
+      "publicRoute": null,
+      "entries": []
+    },
+    {
+      "id": "research",
+      "label": "研究内容",
+      "status": "unpublished",
+      "publicRoute": null,
+      "entries": []
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+/* Independent Forest invitation. All selectors are scoped to this entry. */
+.forest-invitation {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.4rem 2rem;
+  margin: 2rem 0 1rem;
+  padding: clamp(1.4rem, 3vw, 2rem);
+  border: 1px solid var(--line, #d7deea);
+  border-radius: 16px;
+  background: var(--surface, #fff);
+  color: var(--ink, #172238);
+}
+.forest-invitation__eyebrow {
+  margin: 0 0 .4rem;
+  color: var(--muted, #566278);
+  font-size: .85rem;
+  letter-spacing: .04em;
+}
+.forest-invitation h2 {
+  margin: 0 0 .65rem;
+  font-size: clamp(1.5rem, 2.5vw, 1.8rem);
+  line-height: 1.45;
+}
+.forest-invitation__copy {
+  margin: 0;
+  max-width: 36em;
+  color: var(--muted, #566278);
+  line-height: 1.9;
+}
+.forest-invitation__copy span { display: block; }
+.forest-invitation__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .7rem;
+  min-height: 48px;
+  padding: .65rem 1rem;
+  border: 1px solid var(--accent, #426366);
+  border-radius: 10px;
+  color: var(--ink, #172238);
+  background: var(--surface-2, #f5f7fc);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.forest-invitation__link:hover {
+  color: var(--accent, #426366);
+  border-color: currentColor;
+}
+.forest-invitation__link:focus-visible {
+  outline: 3px solid var(--orange, #ad3e12);
+  outline-offset: 4px;
+}
+@media (max-width: 680px) {
+  .forest-invitation { grid-template-columns: minmax(0, 1fr); gap: 1.2rem; }
+  .forest-invitation__link { justify-self: start; max-width: 100%; white-space: normal; }
+}
+@media print { .forest-invitation { break-inside: avoid; } }
