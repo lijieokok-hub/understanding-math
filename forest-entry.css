@@ -17,7 +17,7 @@
   font-size: .85rem;
   letter-spacing: .04em;
 }
-.forest-invitation h2 {
+.forest-invitation :is(h2, h3) {
   margin: 0 0 .65rem;
   font-size: clamp(1.5rem, 2.5vw, 1.8rem);
   line-height: 1.45;
@@ -59,3 +59,6 @@
   .forest-invitation__link { justify-self: start; max-width: 100%; white-space: normal; }
 }
 @media print { .forest-invitation { break-inside: avoid; } }
+
+/* A separate homepage section, at the same level as academic topics. */
+.forest-section .forest-invitation { margin: 0; }
