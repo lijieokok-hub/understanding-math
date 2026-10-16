@@ -43,13 +43,16 @@ function hashTarget(){try{return document.getElementById(decodeURIComponent(loca
 function nearestReadingAnchor(){
  const geometry=readingGeometry(),candidates=detailedHeadings.length?detailedHeadings:headings.map(el=>({el,id:el.id}));
  const incoming=hashTarget();
- // Keep an exact native hash landing (including page-end clamping) on a pure
- // language roundtrip. Geometry, rather than a sticky flag, releases it on scroll.
+ // Keep the explicit destination while its heading remains in the reading band.
+ // Font layout and focus scrolling can move a hash landing by a few pixels;
+ // avoid selecting the previous section around that narrow boundary.
+ // Once the reader scrolls past this visible band, normal heading selection resumes.
  if(incoming?.closest('main')&&incoming.matches('h2,h3,section')&&visibleAnchor(incoming)){
   const margin=cssPixels(getComputedStyle(incoming).scrollMarginTop),top=incoming.getBoundingClientRect().top;
   const max=Math.max(0,document.documentElement.scrollHeight-window.innerHeight);
   const landing=Math.max(0,Math.min(max,top+window.scrollY-geometry.padding-margin));
-  if(Math.abs(window.scrollY-landing)<=geometry.tolerance)return {el:incoming,id:incoming.id};
+  const bandEnd=Math.max(geometry.padding+margin,geometry.covered)+Math.min(48,Math.max(16,cssPixels(getComputedStyle(incoming).lineHeight)));
+  if(Math.abs(window.scrollY-landing)<=geometry.tolerance||(top>=geometry.covered-geometry.tolerance&&top<=bandEnd))return {el:incoming,id:incoming.id};
  }
  let found=null;
  for(const x of candidates){
