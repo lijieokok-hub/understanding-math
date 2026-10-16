@@ -5,7 +5,8 @@
   if (!slides.length) return;
   const faces = slides.map(slide => Array.from(slide.querySelectorAll(':scope > .slide-face')));
   const total = slides.length;
-  const mainCount = Number(document.body.dataset.mainCount) || 22;
+  const requestedMainCount = Number(document.body.dataset.mainCount);
+  const mainCount = Number.isFinite(requestedMainCount) ? requestedMainCount : 22;
   const en = (document.body.dataset.lang || document.documentElement.lang || document.body.lang || '').startsWith('en');
   const tr = (zh, english) => en ? english : zh;
   const PROTOCOL = 'recovered-report-presenter-v1';
@@ -194,7 +195,27 @@
   }
   function parseHash() {
     const match = window.location.hash.match(/^#slide-(\d+)(?:-step-(\d+))?$/);
-    return match ? { index: Number(match[1]) - 1, step: Number(match[2] || 1) - 1 } : { index: 0, step: 0 };
+    if (!match) return { index: 0, step: 0 };
+    const number = Number(match[1]);
+    if (!document.body.hasAttribute('data-archive') && number > 12 && number <= 45) {
+      if (number >= 23) {
+        const archive = new URL('technical.html', window.location.href);
+        archive.hash = '#slide-' + (number - 22) + (match[2] ? '-step-' + match[2] : '');
+        window.location.replace(archive.href);
+        return { index: 0, step: 0 };
+      }
+      const migrated = {13:7,14:9,15:9,16:9,17:9,18:9,19:9,20:9,21:10,22:12}[number];
+      if (!document.getElementById('legacy-report-notice')) {
+        const notice = document.createElement('p');
+        notice.id = 'legacy-report-notice';
+        notice.className = 'archive-disclosure';
+        notice.setAttribute('role', 'status');
+        notice.textContent = tr('报告已精简为 12 页。此旧链接已转到相关主题；历史技术备查另设入口。', 'The report now has 12 main slides. This older link opens a related topic; historical technical backup slides have a separate entry.');
+        document.querySelector('.report-back')?.appendChild(notice);
+      }
+      return { index: migrated - 1, step: 0 };
+    }
+    return { index: number - 1, step: Number(match[2] || 1) - 1 };
   }
   function setTheme(value) {
     theme = value === 'dark' ? 'dark' : 'light';
@@ -621,6 +642,3 @@
     getState: () => ({ ...snapshot(), presenter, connected, hasLostConnection, total, mainCount, faceCount: faces.reduce((sum, group) => sum + group.length, 0) })
   });
 })();
-
-/* Isolated, first-party page-view counter. Never runs inside report frames. */
-(() => { try { if (window.__OFFLINE_MATH__ || location.origin !== 'https://lijieokok-hub.github.io' || !location.pathname.startsWith('/understanding-math/') || window.top !== window.self || document.querySelector('script[data-site-views]')) return; const s = document.createElement('script'); s.dataset.siteViews = ''; s.src = '/understanding-math/visitor-count.js'; s.async = true; document.head.append(s); } catch {} })();
