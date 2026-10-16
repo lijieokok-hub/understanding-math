@@ -59,7 +59,7 @@
   }
   function safePath(path) {
     return /^(?:en\/)?(?:index|topic|popular|close-reading|standard-factor|graduate|lecture|method|demo|reading-[0-9]{2}[a-z]?|reading-r(?:0[1-5])?|reading-h(?:0[1-9]|10(?:-appendix)?|11(?:-(?:spatial|detection|predictor|parameters))?|12(?:-history)?|13(?:-(?:technical|sources))?)?)\.html$/.test(path)
-      || /^(?:en\/)?report\/index\.html$/.test(path);
+      || /^(?:en\/)?report\/(?:index|technical)\.html$/.test(path);
   }
   function safeRecord(item, locale) {
     return item && typeof item.path === 'string' && safePath(item.path)
