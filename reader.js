@@ -1,4 +1,10 @@
-'use strict';
+ 'use strict';
+Object.assign(window.MATH_DOCUMENT_TITLES||(window.MATH_DOCUMENT_TITLES={}),{
+ 'close-reading.html':'多重遍历平均：主要结果',
+ 'reading-h.html':'H：三线性 Hilbert 变换的主要结果',
+ 'en/close-reading.html':'Multiple ergodic averages: main results',
+ 'en/reading-h.html':'H: main results for the trilinear Hilbert transform'
+});
 (()=>{
 const en=document.documentElement.lang==='en', L=(zh,english)=>en?english:zh;
 const PREF_KEY='math-understanding.preferences.v1',RECORD_KEY='math-understanding.reading.v1';
@@ -91,4 +97,42 @@ input?.addEventListener('input',filterReferences);$('reference-clear')?.addEvent
 if(page.endsWith('index.html')&&['#references','#resources','#topic'].includes(location.hash)){location.replace('topic.html'+(location.hash==='#resources'?'#intro-video':location.hash));}
 document.querySelectorAll('[data-language]').forEach(a=>{const base=a.getAttribute('href');let captured=null;function currentHash(){const anchor=nearestReadingAnchor();return anchor?'#'+anchor.id:''}function sync(hash=currentHash()){a.href=base+hash}sync();window.addEventListener('hashchange',()=>sync());a.addEventListener('pointerdown',()=>{captured=currentHash();sync(captured)});a.addEventListener('pointercancel',()=>{captured=null});a.addEventListener('blur',()=>{captured=null});a.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')captured=null});a.addEventListener('click',e=>{sync(e.detail===0?currentHash():(captured??currentHash()));captured=null;try{localStorage.setItem('math-understanding.language.v1',a.dataset.language)}catch{}})});
 applyPreferences(preferences,false);filterReferences();queueUpdate(false);
+})();
+
+/* Principal-results route: keep historical anchors and optional technical notes. */
+(()=>{
+ const en=document.documentElement.lang==='en';
+ const titles={
+  'close-reading.html':'多重遍历平均：主要结果',
+  'reading-h.html':'H：三线性 Hilbert 变换的主要结果',
+  'en/close-reading.html':'Multiple ergodic averages: main results',
+  'en/reading-h.html':'H: main results for the trilinear Hilbert transform'
+ };
+ Object.assign(window.MATH_DOCUMENT_TITLES||(window.MATH_DOCUMENT_TITLES={}),titles);
+ const main=document.querySelector('main.reader-main');
+ const path=location.pathname.split('/').pop();
+ function openAnchor(){
+  let id;try{id=decodeURIComponent(location.hash.slice(1))}catch{return}
+  if(!id)return;const target=document.getElementById(id);if(!target)return;
+  let p=target.parentElement,opened=false;
+  while(p){if(p.tagName==='DETAILS'&&!p.open){p.open=true;opened=true}p=p.parentElement}
+  if(opened||target.closest('details'))requestAnimationFrame(()=>target.scrollIntoView({block:'start'}));
+ }
+ window.addEventListener('hashchange',openAnchor);openAnchor();
+ if(!main)return;
+ // Whole-page labels agree with the destination heading; section links keep their specific labels.
+ for(const a of main.querySelectorAll('a[href]')){
+  const href=a.getAttribute('href');
+  if(href==='reading-h.html'||href==='close-reading.html')a.textContent=titles[(en?'en/':'')+href];
+ }
+ if(/^reading-h\d\d(?:-[a-z]+)?\.html$/.test(path)){
+  const sheet=document.createElement('link');sheet.rel='stylesheet';sheet.href=(en?'../':'')+'results-route.css';document.head.append(sheet);
+  const notice=document.createElement('p');notice.className='reading-reference-notice';notice.dataset.annotationIgnore='';
+  notice.textContent=en?'Optional technical note. You can return to the principal results without reading every subsequent module.':'可选技术记录。这里保留原有推导；了解主要结果不需要沿后续模块逐篇读下去。';
+  const route=document.createElement('nav');route.className='results-route';route.dataset.annotationIgnore='';route.setAttribute('aria-label',en?'Return to main results':'返回主要结果');
+  for(const f of ['reading-h.html','close-reading.html']){const a=document.createElement('a');a.href=f;a.textContent=titles[(en?'en/':'')+f];route.append(a)}
+  const breadcrumb=main.querySelector('.breadcrumbs');if(breadcrumb){breadcrumb.after(notice);notice.after(route.cloneNode(true))}else{main.prepend(notice);notice.after(route.cloneNode(true))}
+  const old=main.querySelectorAll(':scope > .unit-pagination,:scope > .source-link-row');
+  if(old.length){const optional=document.createElement('details');optional.className='technical-archive';optional.dataset.annotationIgnore='';const summary=document.createElement('summary');summary.textContent=en?'Optional technical cross-references':'可选：相关技术记录';optional.append(summary);old[0].before(route,optional);for(const n of old)optional.append(n)}
+ }
 })();

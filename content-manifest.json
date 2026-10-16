@@ -1,5 +1,5 @@
 {
-  "build": "2026-10-08-reading-dependencies-02",
+  "build": "2026-10-16-main-results-navigation",
   "topics": [
     {
       "id": "multiple-ergodic-averages",
@@ -79,8 +79,8 @@
         "en"
       ],
       "title": {
-        "zh": "多重遍历平均：原文精读",
-        "en": "Multiple ergodic averages: close reading"
+        "zh": "多重遍历平均：主要结果",
+        "en": "Multiple ergodic averages: main results"
       }
     },
     {
@@ -547,8 +547,8 @@
         "en"
       ],
       "title": {
-        "zh": "H 的调和分析依赖：从局部形式读到 D",
-        "en": "From local forms in H to the estimates used in D"
+        "zh": "H：三线性 Hilbert 变换的主要结果",
+        "en": "H: main results for the trilinear Hilbert transform"
       }
     },
     {
