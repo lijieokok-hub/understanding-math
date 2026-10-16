@@ -101,7 +101,9 @@ input?.addEventListener('input',filterReferences);$('reference-clear')?.addEvent
 if(page.endsWith('index.html')&&['#references','#resources','#topic'].includes(location.hash)){location.replace('topic.html'+(location.hash==='#resources'?'#intro-video':location.hash));}
 const languageDestinations=Array.from(document.querySelectorAll('[data-language]')).map(a=>({a,base:a.getAttribute('href')}));
 syncLanguagePosition=id=>{for(const {a,base} of languageDestinations)a.href=base+(id?'#'+id:'')};
-languageDestinations.forEach(({a,base})=>{let captured=null;function currentHash(){const anchor=nearestReadingAnchor();return anchor?'#'+anchor.id:''}function sync(hash=currentHash()){a.href=base+hash}sync();window.addEventListener('hashchange',()=>sync());a.addEventListener('pointerdown',()=>{captured=currentHash();sync(captured)});a.addEventListener('pointercancel',()=>{captured=null});a.addEventListener('blur',()=>{captured=null});a.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')captured=null});a.addEventListener('click',e=>{sync(e.detail===0?currentHash():(captured??currentHash()));captured=null;try{localStorage.setItem('math-understanding.language.v1',a.dataset.language)}catch{}})});
+// Keep the stable, visible destination during focus and activation; do not
+// recalculate the section between pointerdown and the browser following the link.
+languageDestinations.forEach(({a})=>a.addEventListener('click',()=>{try{localStorage.setItem('math-understanding.language.v1',a.dataset.language)}catch{}}));
 applyPreferences(preferences,false);filterReferences();queueUpdate(false);
 })();
 
