@@ -46,6 +46,69 @@ if(strict){
  try{await p.goto(root+'index.html',{waitUntil:'domcontentloaded'});await p.waitForTimeout(400);assert.equal(await p.locator('.jay-math-mote').count(),0);console.log('PASS reduced motion');}
  catch(e){failures.push('reduced motion '+String(e));}finally{await p.close();}
 }
+
+if(strict){
+ for(const route of ['index.html','en/index.html','reading-01.html']){
+  const page=await browser.newPage({viewport:{width:390,height:844}});
+  try{
+   await page.goto(root+route,{waitUntil:'domcontentloaded'});
+   const toggle=page.locator('.jay-math-menu-toggle');
+   const nav=page.locator('header.site-header nav.header-links');
+   assert.equal(await toggle.isVisible(),true,route+' mobile menu button');
+   assert.equal(await nav.isVisible(),false,route+' closed nav');
+   await toggle.click();
+   assert.equal(await toggle.getAttribute('aria-expanded'),'true');
+   assert.equal(await nav.isVisible(),true);
+   const links=nav.locator('a[href]');
+   assert.ok(await links.count()>=5,route+' complete navigation');
+   for(let i=0;i<await links.count();i++){
+    assert.equal(await links.nth(i).isVisible(),true,route+' visible link '+i);
+   }
+   await page.screenshot({path:'jay-math-qa-shots/'+route.replaceAll('/','-')+'-menu-phone.png',animations:'disabled'});
+   await page.keyboard.press('Escape');
+   assert.equal(await toggle.getAttribute('aria-expanded'),'false');
+   assert.equal(await nav.isVisible(),false);
+   assert.equal(await toggle.evaluate(e=>e===document.activeElement),true,'focus returned after escape');
+   console.log('PASS accessible mobile menu',route);
+  }catch(e){failures.push('menu '+route+': '+String(e));console.error('FAIL',failures.at(-1));}
+  finally{await page.close();}
+ }
+ const settings=await browser.newPage({viewport:{width:390,height:844}});
+ try{
+  await settings.goto(root+'reading-01.html',{waitUntil:'domcontentloaded'});
+  const before=await settings.locator('main h1').textContent();
+  await settings.locator('summary').filter({hasText:'阅读设置'}).first().click();
+  await settings.locator('#reader-size').selectOption('2');
+  assert.equal(await settings.locator('#reader-size').inputValue(),'2','200% text setting');
+  assert.equal(await settings.locator('main h1').textContent(),before,'mathematical title unchanged');
+  await settings.locator('#theme-toggle').click();
+  assert.equal(await settings.locator('html').getAttribute('data-theme'),'dark','dark mode works');
+  await settings.screenshot({path:'jay-math-qa-shots/article-dark-phone.png',animations:'disabled'});
+  const overflow=await settings.evaluate(()=>[document.documentElement.scrollWidth,innerWidth]);
+  assert.ok(overflow[0]<=overflow[1]+3,'200% text no horizontal overflow');
+  console.log('PASS reading preferences 200%, theme, mathematical text');
+ }catch(e){failures.push('reader preferences: '+String(e));console.error('FAIL',failures.at(-1));}
+ finally{await settings.close();}
+ const fallback=await browser.newPage({viewport:{width:390,height:844},javaScriptEnabled:false});
+ try{
+  await fallback.goto(root+'index.html',{waitUntil:'domcontentloaded'});
+  assert.equal(await fallback.locator('.header-links').isVisible(),true,'no-JS full nav');
+  assert.equal(await fallback.locator('.jay-math-menu-toggle').count(),0);
+  assert.equal(await fallback.locator('.jay-reading-card').count(),3);
+  console.log('PASS no-JavaScript navigation and reading paths');
+ }catch(e){failures.push('no-JS fallback: '+String(e));console.error('FAIL',failures.at(-1));}
+ finally{await fallback.close();}
+ const themePage=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
+ try{
+  await themePage.goto(root+'index.html',{waitUntil:'domcontentloaded'});
+  const titleMotion=await themePage.locator('.home-hero .hero-brand').evaluate(e=>getComputedStyle(e).animationName);
+  assert.equal(titleMotion,'none','reduced motion homepage');
+  const ways=themePage.locator('.jay-reading-card');
+  assert.equal(await ways.count(),3);
+  console.log('PASS reduced-motion editorial layout');
+ }catch(e){failures.push('reduced-motion layout: '+String(e));console.error('FAIL',failures.at(-1));}
+ finally{await themePage.close();}
+}
 await browser.close();
 if(failures.length){console.error('TOTAL FAILURES',failures.length,failures.join('\n'));process.exitCode=1;}
 else console.log('All JAY math-site diagnostics passed ('+pages.length*sizes.length+' viewports).');
