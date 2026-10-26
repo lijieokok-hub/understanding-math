@@ -7,6 +7,14 @@ on:
     branches:
       - jay/math-design-20261026
       - main
+    paths:
+      - 'style.css'
+      - 'micro.js'
+      - 'reader.js'
+      - 'index.html'
+      - 'en/index.html'
+      - 'tests/jay-math-site.test.mjs'
+      - '.github/workflows/jay-math-design.yml'
   workflow_dispatch:
 permissions:
   contents: read
