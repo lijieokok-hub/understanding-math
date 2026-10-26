@@ -165,13 +165,13 @@
     nav.addEventListener('click',e=>{if(e.target.closest('a[href]'))close();});
     document.addEventListener('keydown',e=>{
       if(header.dataset.jayOpen!=='true')return;
-      if(e.key==='Escape'){e.preventDefault();close(true);return;}
+      if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();close(true);return;}
       if(e.key!=='Tab')return;
       const links=Array.from(nav.querySelectorAll('a[href]')).filter(a=>getComputedStyle(a).display!=='none');
       const first=toggle,last=links.at(-1)||toggle;
       if(e.shiftKey && document.activeElement===first){e.preventDefault();last.focus();}
       else if(!e.shiftKey && document.activeElement===last){e.preventDefault();first.focus();}
-    });
+    },true);
     if(mobile.addEventListener)mobile.addEventListener('change',()=>close());
     window.addEventListener('pagehide',()=>close());
   }
