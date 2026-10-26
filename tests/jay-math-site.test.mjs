@@ -68,6 +68,8 @@ if(strict){
    await page.keyboard.press('Escape');
    assert.equal(await toggle.getAttribute('aria-expanded'),'false');
    assert.equal(await nav.isVisible(),false);
+   const focusData=await page.evaluate(()=>({active:document.activeElement?.outerHTML?.slice(0,280),toggle:document.querySelector('.jay-math-menu-toggle')?.outerHTML?.slice(0,240)}));
+   console.log('FOCUS DETAIL',route,JSON.stringify(focusData));
    assert.equal(await toggle.evaluate(e=>e===document.activeElement),true,'focus returned after escape');
    console.log('PASS accessible mobile menu',route);
   }catch(e){failures.push('menu '+route+': '+String(e));console.error('FAIL',failures.at(-1));}
@@ -85,6 +87,8 @@ if(strict){
   assert.equal(await settings.locator('html').getAttribute('data-theme'),'dark','dark mode works');
   await settings.screenshot({path:'jay-math-qa-shots/article-dark-phone.png',animations:'disabled'});
   const overflow=await settings.evaluate(()=>[document.documentElement.scrollWidth,innerWidth]);
+  const overflowData=await settings.evaluate(()=>({full:document.documentElement.scrollWidth,viewport:innerWidth,offenders:Array.from(document.querySelectorAll('body *')).map(el=>{const r=el.getBoundingClientRect();return {tag:el.tagName,cls:String(el.className?.baseVal||el.className||'').slice(0,85),w:Math.round(r.width),left:Math.round(r.left),right:Math.round(r.right),parent:el.parentElement?.className?.toString().slice(0,60)};}).filter(x=>x.right>innerWidth+3&&x.left>-3).slice(0,30)}));
+  console.log('ZOOM DETAIL',JSON.stringify(overflowData));
   assert.ok(overflow[0]<=overflow[1]+3,'200% text no horizontal overflow');
   console.log('PASS reading preferences 200%, theme, mathematical text');
  }catch(e){failures.push('reader preferences: '+String(e));console.error('FAIL',failures.at(-1));}
