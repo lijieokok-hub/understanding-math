@@ -30,6 +30,21 @@ jobs:
           python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/math-ui-server.log 2>&1 &
           sleep 2
           node tests/jay-math-site.test.mjs
+      - name: Verify GitHub Pages production
+        if: github.ref == 'refs/heads/main'
+        run: |
+          for i in $(seq 1 24); do
+            page=$(curl -LfsS --max-time 12 -H 'Cache-Control: no-cache' https://lijieokok-hub.github.io/understanding-math/index.html 2>/dev/null || true)
+            en_page=$(curl -LfsS --max-time 12 -H 'Cache-Control: no-cache' https://lijieokok-hub.github.io/understanding-math/en/index.html 2>/dev/null || true)
+            css=$(curl -LfsS --max-time 12 -H 'Cache-Control: no-cache' https://lijieokok-hub.github.io/understanding-math/style.css 2>/dev/null || true)
+            if printf '%s' "$page" | grep -q 'jay-reading-ways' && printf '%s' "$en_page" | grep -q 'jay-reading-ways' && printf '%s' "$css" | grep -q 'JAY Math Design'; then
+              echo 'PRODUCTION VERIFIED: bilingual mathematical homepage and design system are live.'
+              exit 0
+            fi
+            sleep 10
+          done
+          echo 'Unable to verify GitHub Pages production deployment.'
+          exit 1
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
