@@ -1,0 +1,62 @@
+name: JAY Math Design QA
+concurrency:
+  group: jay-math-qa-${{ github.ref }}
+  cancel-in-progress: true
+on:
+  push:
+    branches:
+      - jay/math-design-20261026
+      - main
+    paths:
+      - 'style.css'
+      - 'micro.js'
+      - 'reader.js'
+      - 'index.html'
+      - 'en/index.html'
+      - 'tests/jay-math-site.test.mjs'
+      - '.github/workflows/jay-math-design.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser
+        run: |
+          npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Test bilingual pages and mathematical reading
+        env:
+          JAY_STRICT: 'true'
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/math-ui-server.log 2>&1 &
+          sleep 2
+          node tests/jay-math-site.test.mjs
+      - name: Verify GitHub Pages production
+        if: github.ref == 'refs/heads/main'
+        run: |
+          for i in $(seq 1 24); do
+            page=$(curl -LfsS --max-time 12 -H 'Cache-Control: no-cache' https://lijieokok-hub.github.io/understanding-math/index.html 2>/dev/null || true)
+            en_page=$(curl -LfsS --max-time 12 -H 'Cache-Control: no-cache' https://lijieokok-hub.github.io/understanding-math/en/index.html 2>/dev/null || true)
+            css=$(curl -LfsS --max-time 12 -H 'Cache-Control: no-cache' https://lijieokok-hub.github.io/understanding-math/style.css 2>/dev/null || true)
+            if printf '%s' "$page" | grep -q 'jay-reading-ways' && printf '%s' "$en_page" | grep -q 'jay-reading-ways' && printf '%s' "$css" | grep -q 'JAY Math Design'; then
+              echo 'PRODUCTION VERIFIED: bilingual mathematical homepage and design system are live.'
+              exit 0
+            fi
+            sleep 10
+          done
+          echo 'Unable to verify GitHub Pages production deployment.'
+          exit 1
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jay-math-design-browser-screenshots
+          path: jay-math-qa-shots/
+          if-no-files-found: ignore

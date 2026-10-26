@@ -208,3 +208,326 @@ html{scroll-padding-top:6rem}body{font-size:var(--reader-size);line-height:var(-
 .mm-brand-trigger button{min-width:44px;padding:.35rem;white-space:nowrap}
 .mm-brand-trigger button>span{font-size:22px;line-height:1}
 @media(hover:none),(any-pointer:coarse){.mm-brand-trigger{display:flex}}
+
+
+/* JAY Math Design · 2026-10-26
+   Reading-first editorial polish; original math, KaTeX, colours, settings,
+   document anchors and content remain the source of truth. */
+:root{
+  --jay-ease:cubic-bezier(.22,1,.36,1);
+  --jay-gold:#a18b5b;
+  --jay-deck:#46554c;
+  --jay-menu-background:#f6f3e9;
+  --jay-menu-rule:rgba(42,75,56,.18);
+}
+:root[data-theme="dark"]{
+  --jay-gold:#d2bd88;
+  --jay-deck:#c1cbbf;
+  --jay-menu-background:#171e1a;
+  --jay-menu-rule:rgba(190,213,191,.20);
+}
+.site-header{position:relative}
+.site-header .header-links a{
+  text-underline-offset:.3em;
+  transition:color .22s ease;
+}
+.site-header .header-links a:focus-visible{
+  outline:3px solid var(--orange);
+  outline-offset:4px;
+  border-radius:2px;
+}
+.reader-tools :is(button,summary,select):focus-visible{outline-offset:3px}
+.reader-settings summary{touch-action:manipulation}
+.reader-main :is(.math-display,.formula,.math-block,.table-scroll){
+  scrollbar-width:thin;
+  scrollbar-color:var(--muted) transparent;
+}
+.reader-main :is(.math-display,.formula,.math-block):focus-visible{
+  outline:2px solid var(--orange);
+  outline-offset:2px;
+}
+/* The original orbital illustration never animates or changes its geometry. */
+body[data-doc="index"] .home-main{padding-bottom:clamp(44px,7vw,96px)}
+body[data-doc="index"] .home-hero{
+  min-height:405px;
+  padding:clamp(32px,4.7vw,62px);
+  border-radius:8px 34px 8px 34px;
+  border-color:var(--line);
+}
+body[data-doc="index"] .home-hero:after{
+  background:linear-gradient(90deg,rgba(247,244,234,.97) 0%,rgba(247,244,234,.92) 36%,rgba(247,244,234,.59) 62%,rgba(247,244,234,.04) 100%);
+}
+:root[data-theme="dark"] body[data-doc="index"] .home-hero:after{
+  background:linear-gradient(90deg,rgba(22,34,26,.96) 0%,rgba(22,34,26,.89) 39%,rgba(22,34,26,.57) 68%,rgba(22,34,26,.04) 100%);
+}
+body[data-doc="index"] .home-hero .hero-copy{width:63%;max-width:680px;min-width:0}
+body[data-doc="index"] .home-hero .hero-brand{margin:0!important}
+body[data-doc="index"] .home-hero .hero-brand svg{max-width:100%;display:block}
+.jay-hero-eyebrow,.jay-section-eyebrow,.jay-reading-card-kicker{
+  font:650 clamp(11px,.95vw,13px)/1.7 system-ui,-apple-system,"PingFang SC",sans-serif;
+  letter-spacing:.12em;
+  color:var(--accent);
+}
+.jay-hero-eyebrow{margin:0 0 clamp(22px,3vw,33px)}
+.jay-hero-deck{
+  font:400 clamp(15px,1.34vw,18px)/1.9 "Songti SC","Noto Serif CJK SC","SimSun",Georgia,serif;
+  max-width:36em;margin:clamp(14px,2vw,24px) 0 clamp(22px,3vw,32px);
+  color:var(--jay-deck);
+  text-wrap:pretty;
+}
+:lang(en) .jay-hero-deck{
+  font-family:Georgia,"Times New Roman",serif;
+  line-height:1.65;
+  letter-spacing:.005em;
+}
+.jay-hero-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px 23px}
+.jay-hero-actions a{
+  display:inline-flex;align-items:center;justify-content:center;gap:15px;
+  min-height:48px;padding:10px 0;
+  text-decoration:none;
+  font-size:14px;font-weight:600;line-height:1.45;
+  transition:transform .45s var(--jay-ease),background-color .25s ease,color .25s ease,border-color .25s ease;
+}
+.jay-hero-primary{
+  padding:12px 21px!important;background:var(--accent);color:var(--paper)!important;
+  border:1px solid var(--accent);border-radius:4px 15px 4px 15px;
+}
+.jay-hero-primary span{display:inline-block;transition:transform .45s var(--jay-ease)}
+.jay-hero-secondary{border-bottom:1px solid var(--jay-gold);color:var(--ink)}
+@media(hover:hover) and (pointer:fine){
+  .jay-hero-primary:hover{background:var(--ink);border-color:var(--ink);transform:translate3d(0,-2px,0)}
+  .jay-hero-primary:hover span{transform:translate3d(4px,-3px,0)}
+  .jay-hero-secondary:hover{color:var(--accent)}
+}
+.jay-hero-actions a:focus-visible{
+  outline:3px solid var(--orange);outline-offset:4px;
+}
+/* Three real ways into the published mathematics, never dummy statistics. */
+.jay-reading-ways{padding:clamp(46px,6.4vw,76px) 0 clamp(32px,5vw,58px);border-bottom:1px solid var(--line)}
+.jay-reading-ways-head{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,.8fr);
+  gap:24px;align-items:end;margin-bottom:30px;
+}
+.jay-section-eyebrow{margin:0 0 8px}
+.jay-reading-ways h2{
+  margin:0;font:500 clamp(26px,3vw,36px)/1.45 "Songti SC","Noto Serif CJK SC","SimSun",Georgia,serif;
+  letter-spacing:.015em;white-space:normal;text-wrap:balance;
+}
+:lang(en) .jay-reading-ways h2{font-family:Georgia,"Times New Roman",serif}
+.jay-reading-ways-head>p{
+  margin:0 0 3px;color:var(--muted);font-size:clamp(14px,1.1vw,16px);line-height:1.85;max-width:42ch;
+}
+.jay-reading-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,2.2vw,30px)}
+.jay-reading-card{
+  display:grid;grid-template-columns:31px minmax(0,1fr);gap:13px;
+  align-items:start;min-width:0;
+  padding:22px 9px 21px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid transparent;
+  text-decoration:none;color:var(--ink);
+  transition:transform .5s var(--jay-ease),border-color .25s ease,background-color .25s ease;
+}
+.jay-reading-card-number{color:var(--jay-gold);font:500 23px/1.35 Georgia,ui-serif,serif;letter-spacing:-.045em}
+.jay-reading-card-body{display:flex;flex-direction:column;align-items:flex-start;min-width:0;gap:6px}
+.jay-reading-card strong{
+  font:600 clamp(20px,1.6vw,24px)/1.45 "Songti SC","Noto Serif CJK SC","SimSun",Georgia,serif;
+  color:var(--ink);
+}
+:lang(en) .jay-reading-card strong{font-family:Georgia,serif}
+.jay-reading-card-description{color:var(--muted);font-size:14px;line-height:1.85;max-width:33ch;overflow-wrap:anywhere}
+.jay-reading-card-link{
+  font-size:13px;font-weight:650;color:var(--accent);
+  display:inline-flex;gap:7px;align-items:center;border-bottom:1px solid var(--jay-gold);
+  margin-top:13px;padding-bottom:4px;
+}
+.jay-reading-card-link span{display:inline-block;transition:transform .5s var(--jay-ease)}
+@media(hover:hover) and (pointer:fine){
+  .jay-reading-card:hover{border-top-color:var(--accent);transform:translate3d(0,-3px,0)}
+  .jay-reading-card:hover .jay-reading-card-link span{transform:translate3d(4px,-2px,0)}
+}
+.jay-reading-card:focus-visible{outline:3px solid var(--orange);outline-offset:5px}
+body[data-doc="index"] .platform-section{padding:clamp(34px,5vw,53px) 0}
+body[data-doc="index"] .platform-section>h2{
+  margin:0 0 23px;font:550 clamp(25px,2.4vw,32px)/1.5 "Songti SC","Noto Serif CJK SC","SimSun",Georgia,serif;
+}
+:lang(en) body[data-doc="index"] .platform-section>h2{font-family:Georgia,serif}
+body[data-doc="index"] .topic-entry{
+  min-height:155px;align-items:center;
+  border-radius:6px 24px 6px 24px;
+  transition:transform .55s var(--jay-ease),border-color .3s ease,background-color .3s ease;
+}
+body[data-doc="index"] .topic-entry h3{font-family:"Songti SC","Noto Serif CJK SC","SimSun",Georgia,serif;font-weight:600}
+:lang(en) body[data-doc="index"] .topic-entry h3{font-family:Georgia,serif}
+@media(hover:hover) and (pointer:fine){
+  body[data-doc="index"] .topic-entry:hover{transform:translate3d(0,-3px,0)}
+}
+body[data-doc="index"] .topic-entry:focus-visible{outline-offset:5px}
+body[data-doc="index"] .forest-section .forest-invitation{
+  border-radius:6px 22px 6px 22px;
+  background:var(--surface);
+}
+body[data-doc="index"] .forest-invitation__link{
+  border-radius:4px 14px 4px 14px;
+  transition:background-color .25s ease,border-color .25s ease,transform .4s var(--jay-ease);
+}
+@media(hover:hover) and (pointer:fine){
+  body[data-doc="index"] .forest-invitation__link:hover{transform:translate3d(0,-2px,0)}
+}
+/* Motion is an optional enhancement; text stays readable at every frame. */
+body.jay-math-entrance .jay-hero-eyebrow,
+body.jay-math-entrance .home-hero .hero-brand,
+body.jay-math-entrance .jay-hero-deck,
+body.jay-math-entrance .jay-hero-actions{
+  animation:jay-math-rise .7s var(--jay-ease) both;
+}
+body.jay-math-entrance .home-hero .hero-brand{animation-delay:70ms}
+body.jay-math-entrance .jay-hero-deck{animation-delay:140ms}
+body.jay-math-entrance .jay-hero-actions{animation-delay:200ms}
+@keyframes jay-math-rise{
+  from{opacity:.76;transform:translate3d(0,9px,0)}
+  to{opacity:1;transform:translate3d(0,0,0)}
+}
+body[data-doc="index"] .jay-soft-reveal{
+  transition:opacity .7s var(--jay-ease),transform .7s var(--jay-ease);
+}
+body[data-doc="index"] .jay-soft-reveal.jay-pending{
+  opacity:.82;transform:translate3d(0,13px,0);
+}
+.jay-math-menu-toggle{display:none}
+@media(max-width:900px){
+  .jay-reading-grid{gap:15px}
+  .jay-reading-ways-head{grid-template-columns:minmax(0,1fr);gap:10px}
+  .jay-reading-ways-head>p{max-width:65ch}
+  body[data-doc="index"] .home-hero .hero-copy{width:75%;max-width:100%}
+}
+@media(max-width:700px){
+  html.jay-math-menu-ready .site-header[data-jay-open="true"]{z-index:100}
+  html.jay-math-menu-ready .site-header .brand-row{
+    display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;
+    gap:9px 12px;min-height:73px;padding:10px 18px;
+  }
+  html.jay-math-menu-ready .site-header .brand-micro-area{min-width:0;grid-column:1}
+  html.jay-math-menu-ready .site-header .site-brand.brand-art{
+    width:min(100%,231px);max-width:100%;min-width:0;
+  }
+  html.jay-math-menu-ready .site-header .site-brand svg{max-width:100%}
+  html.jay-math-menu-ready .site-header .jay-math-menu-toggle{
+    display:inline-flex;grid-column:2;align-items:center;justify-content:center;
+    gap:8px;min-width:48px;min-height:44px;padding:8px 10px;
+    border:1px solid var(--line);background:var(--surface);
+    border-radius:4px 13px 4px 13px;color:var(--ink);
+    font-size:12px;letter-spacing:.06em;line-height:1.2;
+    position:relative;z-index:102;
+  }
+  .jay-math-menu-lines{width:17px;display:grid;gap:5px}
+  .jay-math-menu-lines i{
+    display:block;width:17px;height:1.5px;border-radius:2px;background:currentColor;
+    transition:transform .36s var(--jay-ease);
+  }
+  html.jay-math-menu-ready .site-header[data-jay-open="true"] .jay-math-menu-lines i:first-child{transform:translate3d(0,3.25px,0) rotate(45deg)}
+  html.jay-math-menu-ready .site-header[data-jay-open="true"] .jay-math-menu-lines i:last-child{transform:translate3d(0,-3.25px,0) rotate(-45deg)}
+  html.jay-math-menu-ready .site-header .header-links{
+    display:none!important;position:fixed!important;inset:0!important;
+    width:100vw!important;max-width:none!important;height:100dvh!important;
+    max-height:100dvh!important;min-height:100svh!important;overflow-y:auto!important;
+    z-index:101!important;margin:0!important;
+    padding:max(105px,15svh) clamp(25px,7vw,54px) max(20px,env(safe-area-inset-bottom))!important;
+    flex-direction:column!important;flex-wrap:nowrap!important;
+    align-items:stretch!important;justify-content:flex-start!important;gap:0!important;
+    background:var(--jay-menu-background)!important;border:0!important;
+    border-radius:0!important;box-shadow:none!important;
+  }
+  html.jay-math-menu-ready .site-header[data-jay-open="true"] .header-links{display:flex!important}
+  html.jay-math-menu-ready .site-header .header-links>a{
+    display:flex!important;flex:none!important;min-height:54px!important;
+    padding:11px 3px!important;font-size:clamp(17px,4.2vw,21px)!important;
+    line-height:1.5!important;color:var(--ink)!important;
+    border-bottom:1px solid var(--jay-menu-rule)!important;
+    text-decoration:none!important;
+  }
+  html.jay-math-menu-ready .site-header .header-links .language-picker{
+    width:100%;display:flex;flex-wrap:wrap;align-items:center;
+    gap:14px;min-height:54px;padding:15px 3px;border-bottom:1px solid var(--jay-menu-rule);
+    font-size:16px;
+  }
+  html.jay-math-menu-ready .site-header .header-links .language-switch{
+    display:inline-flex;min-height:44px;align-items:center;padding:8px;
+    font-size:16px;
+  }
+  html.jay-math-menu-ready body.jay-math-menu-open{overflow:hidden}
+  .jay-reading-grid{grid-template-columns:1fr;gap:0}
+  .jay-reading-card{padding:20px 0 21px;gap:14px}
+  .jay-reading-card strong{font-size:23px}
+  .jay-reading-card-description{max-width:60ch}
+  .jay-reading-ways{padding:42px 0 24px}
+  body[data-doc="index"] .home-hero{
+    min-height:395px;
+    padding:32px 25px 88px;
+    border-radius:5px 22px 5px 22px;
+  }
+  body[data-doc="index"] .home-hero .hero-copy{width:100%;max-width:100%}
+  body[data-doc="index"] .home-hero:after{
+    background:linear-gradient(180deg,rgba(247,244,234,.98) 0%,rgba(247,244,234,.94) 51%,rgba(247,244,234,.64) 77%,rgba(247,244,234,.26) 100%);
+  }
+  :root[data-theme="dark"] body[data-doc="index"] .home-hero:after{
+    background:linear-gradient(180deg,rgba(22,34,26,.97) 0%,rgba(22,34,26,.92) 55%,rgba(22,34,26,.73) 79%,rgba(22,34,26,.34) 100%);
+  }
+  .jay-hero-eyebrow{margin-bottom:21px}
+  .jay-hero-deck{font-size:16px;line-height:1.88;margin:20px 0}
+  .jay-hero-actions{gap:8px 20px}
+  .jay-hero-actions a{font-size:14px}
+  body[data-doc="index"] .platform-section{padding:30px 0}
+  body[data-doc="index"] .topic-entry{min-height:0}
+}
+@media(max-width:370px){
+  body[data-doc="index"] .home-hero{padding:26px 19px 76px}
+  .jay-hero-deck{font-size:15px}
+  .jay-hero-actions{gap:6px 10px}
+  .jay-hero-primary{padding-inline:15px!important}
+  html.jay-math-menu-ready .site-header .brand-row{padding-inline:14px}
+}
+@media(prefers-reduced-motion:reduce){
+  body.jay-math-entrance .jay-hero-eyebrow,
+  body.jay-math-entrance .home-hero .hero-brand,
+  body.jay-math-entrance .jay-hero-deck,
+  body.jay-math-entrance .jay-hero-actions{animation:none!important;opacity:1!important;transform:none!important}
+  body[data-doc="index"] .jay-soft-reveal,
+  body[data-doc="index"] .jay-soft-reveal.jay-pending{
+    transition:none!important;opacity:1!important;transform:none!important
+  }
+  .site-header .header-links a,.jay-reading-card,.jay-reading-card-link span,
+  .jay-hero-actions a,.jay-hero-primary span,.jay-math-menu-lines i{
+    transition:none!important
+  }
+}
+@media print{
+  .jay-math-menu-toggle{display:none!important}
+  .jay-reading-ways{break-inside:avoid}
+  body[data-doc="index"] .jay-soft-reveal,body[data-doc="index"] .jay-soft-reveal.jay-pending{
+    transform:none!important;opacity:1!important
+  }
+  body.jay-math-entrance .home-hero .hero-brand{animation:none!important}
+}
+
+
+/* At 200% reading size, an unbreakable inline KaTeX formula can protrude
+   beyond its text column. Make the formula itself horizontally scrollable,
+   never clip the article or reduce the requested type size. Display equations
+   already have their own accessible scrolling region and are excluded. */
+@media(max-width:700px){
+  .reader-main :not(.katex-display) > .katex{
+    display:inline-block;
+    max-width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scrollbar-width:thin;
+    scrollbar-color:var(--muted) transparent;
+    vertical-align:-.16em;
+  }
+}
+
+/* Keep the original math wordmark above the open mobile navigation sheet. */
+@media(max-width:700px){
+  html.jay-math-menu-ready .site-header[data-jay-open="true"] .brand-micro-area{
+    position:relative;z-index:102;
+  }
+}
