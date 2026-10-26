@@ -89,6 +89,20 @@ if(strict){
   const overflow=await settings.evaluate(()=>[document.documentElement.scrollWidth,innerWidth]);
   const overflowData=await settings.evaluate(()=>({full:document.documentElement.scrollWidth,viewport:innerWidth,offenders:Array.from(document.querySelectorAll('body *')).map(el=>{const r=el.getBoundingClientRect();return {tag:el.tagName,cls:String(el.className?.baseVal||el.className||'').slice(0,85),w:Math.round(r.width),left:Math.round(r.left),right:Math.round(r.right),parent:el.parentElement?.className?.toString().slice(0,60)};}).filter(x=>x.right>innerWidth+3&&x.left>-3).slice(0,30)}));
   console.log('ZOOM DETAIL',JSON.stringify(overflowData));
+  const overflowTrace=await settings.evaluate(()=>{
+    const selectors=['html','body','.site-header','.brand-row','.reader-tools','.reader-tools-inner','.reading-shell','.reader-main','main','#article-discussion','.reader-main .math-display','.reader-main .formula'];
+    const containers=selectors.map(selector=>{
+      const e=document.querySelector(selector);
+      if(!e)return {selector,missing:true};
+      const r=e.getBoundingClientRect(),s=getComputedStyle(e);
+      return {selector,scrollWidth:e.scrollWidth,clientWidth:e.clientWidth,right:Math.round(r.right),width:Math.round(r.width),overflowX:s.overflowX};
+    });
+    const candidates=Array.from(document.querySelectorAll('body *')).map(e=>({e,r:e.getBoundingClientRect()}))
+    .filter(({e,r})=>r.right>innerWidth+2 && r.right<innerWidth+90 && r.left>-3 && !e.closest('.katex,.katex-mathml'))
+    .slice(0,55).map(({e,r})=>({tag:e.tagName,cls:String(e.className?.baseVal||e.className||'').slice(0,60),right:Math.round(r.right),left:Math.round(r.left),scrollWidth:e.scrollWidth,clientWidth:e.clientWidth,parent:String(e.parentElement?.className||'').slice(0,60),overflowX:getComputedStyle(e).overflowX}));
+    return {containers,candidates};
+  });
+  console.log('ZOOM TRACE',JSON.stringify(overflowTrace));
   assert.ok(overflow[0]<=overflow[1]+3,'200% text no horizontal overflow');
   console.log('PASS reading preferences 200%, theme, mathematical text');
  }catch(e){failures.push('reader preferences: '+String(e));console.error('FAIL',failures.at(-1));}
