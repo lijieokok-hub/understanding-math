@@ -59,6 +59,13 @@ if(strict){
    await toggle.click();
    assert.equal(await toggle.getAttribute('aria-expanded'),'true');
    assert.equal(await nav.isVisible(),true);
+   const brandClear=await page.evaluate(()=>{
+    const brand=document.querySelector('.site-header .site-brand'),r=brand?.getBoundingClientRect();
+    if(!r)return false;
+    const hit=document.elementFromPoint(r.left+Math.min(24,r.width/2),r.top+r.height/2);
+    return !!hit?.closest('.site-brand');
+   });
+   assert.equal(brandClear,true,route+' keeps wordmark above open menu');
    const links=nav.locator('a[href]');
    assert.ok(await links.count()>=5,route+' complete navigation');
    for(let i=0;i<await links.count();i++){
