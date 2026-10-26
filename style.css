@@ -507,3 +507,20 @@ body[data-doc="index"] .jay-soft-reveal.jay-pending{
   }
   body.jay-math-entrance .home-hero .hero-brand{animation:none!important}
 }
+
+
+/* At 200% reading size, an unbreakable inline KaTeX formula can protrude
+   beyond its text column. Make the formula itself horizontally scrollable,
+   never clip the article or reduce the requested type size. Display equations
+   already have their own accessible scrolling region and are excluded. */
+@media(max-width:700px){
+  .reader-main :not(.katex-display) > .katex{
+    display:inline-block;
+    max-width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scrollbar-width:thin;
+    scrollbar-color:var(--muted) transparent;
+    vertical-align:-.16em;
+  }
+}
