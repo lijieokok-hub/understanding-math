@@ -524,3 +524,10 @@ body[data-doc="index"] .jay-soft-reveal.jay-pending{
     vertical-align:-.16em;
   }
 }
+
+/* Keep the original math wordmark above the open mobile navigation sheet. */
+@media(max-width:700px){
+  html.jay-math-menu-ready .site-header[data-jay-open="true"] .brand-micro-area{
+    position:relative;z-index:102;
+  }
+}
