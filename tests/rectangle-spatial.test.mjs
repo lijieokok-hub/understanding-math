@@ -82,7 +82,7 @@ for(const lang of ['zh','en']){
 // Without JavaScript the diagram and its explanation remain available.
 const nojs=await browser.newContext({viewport:{width:390,height:844},javaScriptEnabled:false});
 const page=await nojs.newPage();
-try{await page.goto(base+'rectangle.html');assert.equal(await page.locator('#spatial-fallback').isVisible(),true);assert.equal(await page.locator('.spatial-math').count(),1);console.log('PASS static fallback');}
+try{await page.goto(base+'rectangle.html');assert.equal(await page.locator('#spatial-fallback').isVisible(),true);assert.equal(await page.locator('.spatial-math').count(),1);assert.equal(await page.locator('#spatial-play').isVisible(),false);assert.equal(await page.locator('#diagonal-play').isVisible(),false);console.log('PASS static fallback');}
 catch(e){failures.push(`no-js: ${e}`);console.error('FAIL',failures.at(-1));}
 await nojs.close();
 await browser.close();
