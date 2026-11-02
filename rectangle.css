@@ -5,3 +5,7 @@ html[data-theme=dark] .hero-art .rect{stroke:#e7aa8e;fill:#d9a87944}
 html[data-theme=dark] .hero-art .diagonal{stroke:#f1bb9d}
 
 :root[data-theme=dark] .hero-art{opacity:1}
+.seam-lab .lab-head p{max-width:66ch}.seam-lab svg text{font-family:system-ui,sans-serif;fill:#294f41}.seam-lab .lab-body{align-items:center}.seam-lab .controls{min-width:0}
+:root[data-theme=dark] .seam-lab svg text{fill:#e5efe2}
+@media(max-width:700px){header{flex-wrap:wrap}.brand{min-width:0;max-width:100%;overflow-wrap:anywhere}.lab-body,.prose,.step{min-width:0}}
+.story-brand{display:block;width:min(220px,100%);flex:0 1 220px;line-height:0}.story-brand svg{display:block;width:100%;height:auto;max-height:42px}

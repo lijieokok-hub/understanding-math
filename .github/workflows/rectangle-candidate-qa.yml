@@ -1,0 +1,44 @@
+name: Rectangle candidate QA
+on:
+  push:
+    branches:
+      - feature/rectangle-story-20261102
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: rectangle-candidate-qa-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  chromium:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser
+        run: |
+          npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Serve site
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/math-ui-server.log 2>&1 &
+          echo $! >/tmp/math-ui-server.pid
+      - name: Existing site regression
+        env:
+          JAY_STRICT: 'true'
+        run: node tests/jay-math-site.test.mjs
+      - name: Bilingual rectangle story and responsive interactions
+        if: always()
+        run: node tests/rectangle-story.test.mjs
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rectangle-candidate-browser-screenshots
+          path: |
+            jay-math-qa-shots/
+            rectangle-qa-shots/
+          if-no-files-found: ignore
