@@ -8,6 +8,14 @@
         "en": "Multiple ergodic averages"
       },
       "path": "topic.html"
+    },
+    {
+      "id": "inscribed-rectangles",
+      "title": {
+        "zh": "一条线，四个角：内接矩形",
+        "en": "One curve, four corners: inscribed rectangles"
+      },
+      "path": "rectangle.html"
     }
   ],
   "documents": [
@@ -849,6 +857,18 @@
       "title": {
         "zh": "阅读、疑问与勘误",
         "en": "Reading, questions, and corrections"
+      }
+    },
+    {
+      "id": "rectangle",
+      "path": "rectangle.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
+        "zh": "一条线，四个角：内接矩形",
+        "en": "One curve, four corners: inscribed rectangles"
       }
     }
   ]

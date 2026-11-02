@@ -1,5 +1,7 @@
  'use strict';
 Object.assign(window.MATH_DOCUMENT_TITLES||(window.MATH_DOCUMENT_TITLES={}),{
+ 'rectangle.html':'四个角的秘密',
+ 'en/rectangle.html':'Four Corners and a Twist',
  'close-reading.html':'多重遍历平均：主要结果',
  'reading-h.html':'H：三线性 Hilbert 变换的主要结果',
  'en/close-reading.html':'Multiple ergodic averages: main results',
@@ -11,7 +13,7 @@ const PREF_KEY='math-understanding.preferences.v1',RECORD_KEY='math-understandin
 const defaults={theme:'light',scale:1,leading:1.9};
 const $=id=>document.getElementById(id);
 function normalizePreferences(raw){return {theme:raw?.theme==='dark'?'dark':'light',scale:[1,1.12,1.25,1.5,2].includes(Number(raw?.scale))?Number(raw.scale):1,leading:[1.7,1.9,2.15].includes(Number(raw?.leading))?Number(raw.leading):1.9};}
-function normalizeRecord(raw){if(!raw||typeof raw!=='object'||typeof raw.page!=='string'||!/^(?:en\/)?(?:popular|graduate|topic|lecture|method|demo|close-reading|standard-factor|reading-[a-z0-9]+|reading-h10-appendix|reading-h11-(?:spatial|detection|predictor|parameters)|reading-h12-history|reading-h13-(?:technical|sources))\.html$/.test(raw.page)||!Number.isFinite(raw.percent)||raw.percent<0||raw.percent>100||!Number.isFinite(raw.updatedAt))return null;return {page:raw.page,title:typeof raw.title==='string'?raw.title.slice(0,160):raw.page,percent:raw.percent,y:Math.max(0,Number(raw.y)||0),heading:typeof raw.heading==='string'?raw.heading.slice(0,120):'',offset:Math.max(0,Number(raw.offset)||0),updatedAt:raw.updatedAt};}
+function normalizeRecord(raw){if(!raw||typeof raw!=='object'||typeof raw.page!=='string'||!/^(?:en\/)?(?:rectangle|popular|graduate|topic|lecture|method|demo|close-reading|standard-factor|reading-[a-z0-9]+|reading-h10-appendix|reading-h11-(?:spatial|detection|predictor|parameters)|reading-h12-history|reading-h13-(?:technical|sources))\.html$/.test(raw.page)||!Number.isFinite(raw.percent)||raw.percent<0||raw.percent>100||!Number.isFinite(raw.updatedAt))return null;return {page:raw.page,title:typeof raw.title==='string'?raw.title.slice(0,160):raw.page,percent:raw.percent,y:Math.max(0,Number(raw.y)||0),heading:typeof raw.heading==='string'?raw.heading.slice(0,120):'',offset:Math.max(0,Number(raw.offset)||0),updatedAt:raw.updatedAt};}
 function resumeDestination(record){
  const titles=window.MATH_DOCUMENT_TITLES||{},canonical=record.page.replace(/^en\//,''),preferred=(en?'en/':'')+canonical;
  const translated=typeof titles[preferred]==='string'&&titles[preferred].length>0;
