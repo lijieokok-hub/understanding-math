@@ -17,3 +17,12 @@ html[data-theme=dark] .spatial-canvas{background:radial-gradient(ellipse at 45% 
 .spatial-visual-note{padding:.55rem .9rem .8rem;font:500 .77rem/1.55 system-ui,sans-serif;color:var(--muted);margin:0}.spatial-pair .spatial-canvas{height:300px}
 html[data-theme=dark] .abstract-band-canvas{background:radial-gradient(ellipse at 48% 45%,#355748,#1b3027)}
 @media(max-width:700px){.spatial-pair{grid-template-columns:1fr}.abstract-band-canvas{height:240px}.spatial-pair .spatial-canvas{height:clamp(250px,72vw,330px)}}
+.spatial-tabs{display:none}
+@media(max-width:700px){
+  .spatial-js .spatial-tabs:not([hidden]){display:flex;flex-wrap:wrap;gap:.45rem;padding:.65rem .8rem}
+  .spatial-js .spatial-tabs button{min-height:44px;flex:1 1 9rem}
+  .spatial-js .spatial-tabs button[aria-pressed=true]{background:#d9e9dc;border-color:#517d66;color:#214c39}
+  .spatial-js .spatial-pair{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain}
+  .spatial-js .spatial-pair>div{flex:0 0 100%;scroll-snap-align:start}
+  html[data-theme=dark] .spatial-js .spatial-tabs button[aria-pressed=true]{background:#456e54;color:#f0f7e9}
+}

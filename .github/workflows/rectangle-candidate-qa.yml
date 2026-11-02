@@ -4,6 +4,7 @@ on:
     branches:
       - feature/rectangle-story-20261102
       - feature/rectangle-3d-visuals-20261102
+      - feature/rectangle-mobile-reading-20261102
   pull_request:
     branches:
       - main
@@ -42,6 +43,9 @@ jobs:
         run: |
           node tests/rectangle-spatial-geometry.test.mjs
           node tests/rectangle-spatial.test.mjs
+      - name: Verify balancing example and reading links
+        if: always()
+        run: node tests/rectangle-balance.test.mjs
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4

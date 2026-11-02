@@ -13,6 +13,26 @@ if (root) {
   const play = $('spatial-play');
   const buttons = Array.from(root.querySelectorAll('[data-spatial-stage]'));
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  // On a narrow screen show one full-size panel at a time. Both canvases keep
+  // their layout and share the same progress even while one is off-screen.
+  const pair = root.querySelector('.spatial-pair');
+  const switcher = root.querySelector('.spatial-tabs');
+  const tabs = Array.from(root.querySelectorAll('[data-spatial-panel]'));
+  if (pair && switcher && tabs.length === 2) {
+    root.classList.add('spatial-js');
+    switcher.hidden = false;
+    const narrow = matchMedia('(max-width: 700px)');
+    const setTab = i => tabs.forEach((tab, n) => tab.setAttribute('aria-pressed', String(i === n)));
+    tabs.forEach((tab, i) => tab.addEventListener('click', () => {
+      const panel = pair.children[i];
+      pair.scrollTo({left: panel.offsetLeft - pair.firstElementChild.offsetLeft, behavior: 'auto'});
+      setTab(i);
+    }));
+    pair.addEventListener('scroll', () => {
+      if (narrow.matches) setTab(pair.scrollLeft > pair.clientWidth / 2 ? 1 : 0);
+    }, {passive: true});
+    narrow.addEventListener('change', () => { pair.scrollLeft = 0; setTab(0); });
+  }
   const caption = en ? [
     '1 / Boundary. A repeated pair {a, a} has length zero. Its address stays on the original ellipse at height 0.',
     '2 / Lift a chord. Its midpoint gives the horizontal position; its length is the height. The coloured sheets together are the image of one band.',

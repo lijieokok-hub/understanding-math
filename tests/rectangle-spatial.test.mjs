@@ -23,6 +23,13 @@ for(const lang of ['zh','en'])for(const s of screens){
     assert.equal(await page.locator('#abstract-band-canvas canvas').count(),1);
     assert.equal(await page.locator('#spatial-canvas canvas').count(),1);
     assert.equal(await page.locator('#spatial-fallback').isVisible(),false);
+    if(s.mobile){
+      assert.equal(await page.locator('[data-spatial-panel="0"]').getAttribute('aria-pressed'),'true');
+      await page.locator('[data-spatial-panel="1"]').tap();
+      assert.equal(await page.locator('[data-spatial-panel="1"]').getAttribute('aria-pressed'),'true');
+      const shown=await page.locator('#spatial-canvas').boundingBox(), container=await page.locator('.spatial-pair').boundingBox();
+      assert.ok(Math.abs(shown.x-container.x)<3, 'mapped view fills the mobile panel');
+    }
     await page.locator('[data-spatial-stage="35"]').click();
     assert.equal(await page.locator('#spatial-story').getAttribute('data-phase'),'2');
     const first=await page.locator('#spatial-canvas').screenshot();
@@ -31,7 +38,9 @@ for(const lang of ['zh','en'])for(const s of screens){
     assert.equal(await page.locator('#spatial-story').getAttribute('data-phase'),'3');
     const collision=await page.locator('#spatial-canvas').screenshot();
     assert.notEqual(hash(first),hash(collision),'the rendered canvas changes between stages');
+    if(s.mobile){await page.locator('[data-spatial-panel="0"]').tap();assert.equal(await page.locator('#spatial-progress').inputValue(),'76');}
     const band=await page.locator('#abstract-band-canvas').screenshot();
+    if(s.mobile)await page.locator('[data-spatial-panel="1"]').tap();
     await page.locator('[data-turn="right"]').click();
     const rotated=await page.locator('#spatial-canvas').screenshot();
     assert.notEqual(hash(collision),hash(rotated),'viewpoint button visibly rotates the 3D projection');
