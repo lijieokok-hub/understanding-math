@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - feature/rectangle-story-20261102
+      - feature/rectangle-3d-visuals-20261102
   pull_request:
     branches:
       - main
@@ -36,6 +37,11 @@ jobs:
       - name: Bilingual rectangle story and responsive interactions
         if: always()
         run: node tests/rectangle-story.test.mjs
+      - name: Verify 3D mathematics and both rendering paths
+        if: always()
+        run: |
+          node tests/rectangle-spatial-geometry.test.mjs
+          node tests/rectangle-spatial.test.mjs
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -44,4 +50,5 @@ jobs:
           path: |
             jay-math-qa-shots/
             rectangle-qa-shots/
+            rectangle-spatial-shots/
           if-no-files-found: ignore
