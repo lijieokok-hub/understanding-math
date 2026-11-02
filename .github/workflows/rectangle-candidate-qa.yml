@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - feature/rectangle-story-20261102
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 permissions:
   contents: read
