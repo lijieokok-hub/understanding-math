@@ -232,184 +232,20 @@ if (root) {
     resize();
   }
 
-  // Lazy-load the site's existing, locally hosted Three.js only as the reader
-  // approaches the visualisation. The static diagram remains if WebGL fails.
-  async function init() {
+  // Both panels use the same mathematical 3D data and the same finite,
+  // time-based animation. No GPU or external library is required.
+  function init() {
     if (initStarted) return;
     initStarted = true;
     try {
       initAbstractBand();
-      const probe = document.createElement('canvas').getContext('webgl2', {failIfMajorPerformanceCaveat: true});
-      if (!probe) { initProjectedCanvas(); return; }
-      probe.getExtension('WEBGL_lose_context')?.loseContext();
-      const THREE = await import('./game/vendor/three.module.js');
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(35, 1, .1, 100);
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-      renderer.setClearColor(0x000000, 0);
-      renderer.domElement.setAttribute('aria-hidden', 'true');
-      canvasHost.append(renderer.domElement);
-      fallback.setAttribute('hidden', '');
-      root.dataset.engine = 'webgl';
-      $('spatial-engine').textContent = en ? 'Drag panel B to turn its view, or use the angle buttons.' : '拖动 B 图可旋转视角，也可以使用下方的视角按钮。';
-      root.querySelector('.spatial-view-controls').hidden = false;
-
-      scene.add(new THREE.HemisphereLight(0xffffff, 0x8faaa0, 2.1));
-      const light = new THREE.DirectionalLight(0xffffff, 1.35);
-      light.position.set(-3, 7, 5); scene.add(light);
-      const target = new THREE.Vector3(0, 1.18, 0);
-      const orbit = { yaw: .8, pitch: .53, aspect: 1.4 };
-      const eye = () => {
-        const distance = 8.2 * Math.max(1, 1.08 / orbit.aspect);
-        camera.position.set(target.x + distance * Math.cos(orbit.pitch) * Math.sin(orbit.yaw),
-          target.y + distance * Math.sin(orbit.pitch),
-          target.z + distance * Math.cos(orbit.pitch) * Math.cos(orbit.yaw));
-        camera.lookAt(target);
-      };
-      const resize = () => {
-        const w = canvasHost.clientWidth, h = canvasHost.clientHeight;
-        if (!w || !h) return;
-        orbit.aspect = w / h; camera.aspect = orbit.aspect;
-        camera.updateProjectionMatrix(); renderer.setSize(w, h, false); eye();
-        renderer.render(scene, camera);
-      };
-
-      const grid = new THREE.GridHelper(4.7, 10, 0xaac4b4, 0xc5d4ca);
-      grid.material.transparent = true; grid.material.opacity = .26; grid.position.y = -.018; scene.add(grid);
-
-      const boundaryPoints = Array.from({length: 193}, (_, i) => {
-        const p = curve(2 * PI * i / 192); return new THREE.Vector3(p[0], .012, p[1]);
-      });
-      const boundary = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(boundaryPoints, true), 240, .018, 7, true),
-        new THREE.MeshPhongMaterial({color: 0x275d4d}));
-      boundary.renderOrder = 2; scene.add(boundary);
-
-      const diskMaterial = new THREE.MeshBasicMaterial({color: 0x8ebca0, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false});
-      const disk = new THREE.Mesh(new THREE.CircleGeometry(1, 100), diskMaterial);
-      disk.rotation.x = -PI / 2; disk.scale.set(A, B, 1); disk.position.y = .001; scene.add(disk);
-
-      const surfaces = [];
-      function sheet(d0, d1, colour) {
-        const nt = 64, nd = 30, vertices = [], indices = [];
-        for (let i = 0; i <= nt; i++) for (let j = 0; j <= nd; j++) {
-          vertices.push(...address(PI * i / nt, d0 + (d1 - d0) * j / nd));
-        }
-        for (let i = 0; i < nt; i++) for (let j = 0; j < nd; j++) {
-          const k = i * (nd + 1) + j;
-          indices.push(k, k + nd + 1, k + 1, k + 1, k + nd + 1, k + nd + 2);
-        }
-        const g = new THREE.BufferGeometry();
-        g.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-        g.setIndex(indices); g.computeVertexNormals();
-        const m = new THREE.MeshPhongMaterial({color: colour, side: THREE.DoubleSide, transparent: true, opacity: .12, depthWrite: false, shininess: 35});
-        const mesh = new THREE.Mesh(g, m); scene.add(mesh); surfaces.push(m);
-      }
-      sheet(0, PI / 2, 0xd59b6a); sheet(PI / 2, PI, 0x83b9a8);
-      const meshLines = new THREE.Group();
-      const lineMat = new THREE.LineBasicMaterial({color: 0x567c6b, transparent: true, opacity: .24, depthWrite: false});
-      for (let i = 0; i <= 16; i++) {
-        const t = PI * i / 16;
-        const pts = Array.from({length: 65}, (_, j) => new THREE.Vector3(...address(t, PI * j / 64)));
-        meshLines.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), lineMat));
-      }
-      for (let j = 2; j < 16; j += 2) {
-        const d = PI * j / 16;
-        const pts = Array.from({length: 65}, (_, i) => new THREE.Vector3(...address(PI * i / 64, d)));
-        meshLines.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), lineMat));
-      }
-      scene.add(meshLines);
-
-      const ballGeometry = new THREE.SphereGeometry(.048, 14, 10);
-      const orange = new THREE.MeshBasicMaterial({color: 0xc0643f});
-      const teal = new THREE.MeshBasicMaterial({color: 0x188579});
-      const dark = new THREE.MeshBasicMaterial({color: 0x285d4b});
-      const first = Array.from({length: 3}, () => new THREE.Mesh(ballGeometry, orange));
-      const second = Array.from({length: 3}, () => new THREE.Mesh(ballGeometry, teal));
-      first.forEach(x => scene.add(x)); second.forEach(x => scene.add(x));
-      const tracer = new THREE.Mesh(ballGeometry, dark); tracer.scale.setScalar(1.3); scene.add(tracer);
-      function rod(color, radius) {
-        const obj = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, 1, 8), new THREE.MeshBasicMaterial({color}));
-        scene.add(obj); return obj;
-      }
-      const rod1 = rod(0xc0643f, .014), rod2 = rod(0x188579, .014), lift1 = rod(0xc0643f, .008), lift2 = rod(0x188579, .008);
-      const up = new THREE.Vector3(0, 1, 0);
-      function join(obj, p, q) {
-        const v = new THREE.Vector3().subVectors(q, p), length = v.length();
-        obj.position.copy(p).add(q).multiplyScalar(.5);
-        obj.scale.set(1, Math.max(length, .00001), 1);
-        obj.quaternion.setFromUnitVectors(up, v.normalize());
-      }
-      const rectLine = new THREE.LineLoop(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({color: 0xb24e32}));
-      rectLine.renderOrder = 4; scene.add(rectLine);
-      const rings = [0xc0643f, 0x188579].map((c, i) => {
-        const r = new THREE.Mesh(new THREE.RingGeometry(.105 + i * .052, .117 + i * .052, 48),
-          new THREE.MeshBasicMaterial({color: c, side: THREE.DoubleSide, depthTest: false}));
-        r.renderOrder = 9; scene.add(r); return r;
-      });
-      const floor = p => new THREE.Vector3(p[0], .025, p[1]);
-      function showChord(theta, delta, balls, stick, lift) {
-        const c = chord(theta, delta), a = floor(c.a), b = floor(c.b), m = floor(c.midpoint);
-        const top = new THREE.Vector3(c.midpoint[0], c.length, c.midpoint[1]);
-        balls[0].position.copy(a); balls[1].position.copy(b); balls[2].position.copy(top);
-        join(stick, a, b); join(lift, m, top);
-        return {c, top};
-      }
-      const visible = (items, on) => items.forEach(x => {x.visible = on;});
-      renderScene = t => {
-        const bandAlpha = .1 + .32 * Math.min(1, Math.max(0, (t - 16) / 30));
-        surfaces.forEach(m => {m.opacity = bandAlpha;});
-        diskMaterial.opacity = .70 * Math.min(1, Math.max(0, (t - 80) / 15));
-        tracer.visible = t < 22;
-        if (t < 22) { const p = curve(PI / 4 + 2 * PI * t / 22); tracer.position.copy(floor(p)); }
-        const one = t >= 22, two = t >= 48, hit = t >= 76;
-        visible([...first, rod1, lift1], one); visible([...second, rod2, lift2], two);
-        let firstData;
-        if (one) {
-          const delta = Math.min(1, (t - 22) / 26) * PI / 2;
-          firstData = showChord(PI / 4, delta, first, rod1, lift1);
-        }
-        if (two) showChord(PI / 2 + Math.min(1, (t - 48) / 28) * PI / 4, PI / 2, second, rod2, lift2);
-        rectLine.visible = hit; rings.forEach(x => {x.visible = hit;});
-        if (hit && firstData) {
-          const x = A / Math.SQRT2, z = B / Math.SQRT2;
-          rectLine.geometry.setFromPoints([[x,z],[x,-z],[-x,-z],[-x,z]].map(p => floor(p)));
-          rings.forEach(r => {r.position.copy(firstData.top); r.quaternion.copy(camera.quaternion);});
-        }
-        eye(); rings.forEach(r => r.quaternion.copy(camera.quaternion));
-        renderer.render(scene, camera);
-      };
-      const rerender = () => { eye(); renderScene(value); };
-      root.querySelectorAll('[data-turn]').forEach(b => b.addEventListener('click', () => {
-        if (b.dataset.turn === 'left') orbit.yaw -= .28;
-        if (b.dataset.turn === 'right') orbit.yaw += .28;
-        if (b.dataset.turn === 'up') orbit.pitch = Math.min(1.15, orbit.pitch + .14);
-        if (b.dataset.turn === 'down') orbit.pitch = Math.max(.13, orbit.pitch - .14);
-        rerender();
-      }));
-      let pointer = null;
-      renderer.domElement.addEventListener('pointerdown', e => {
-        pointer = { id: e.pointerId, x: e.clientX, y: e.clientY };
-        renderer.domElement.setPointerCapture(e.pointerId);
-      });
-      renderer.domElement.addEventListener('pointermove', e => {
-        if (!pointer || pointer.id !== e.pointerId) return;
-        orbit.yaw -= (e.clientX - pointer.x) * .008;
-        orbit.pitch = Math.min(1.15, Math.max(.13, orbit.pitch + (e.clientY - pointer.y) * .005));
-        pointer.x = e.clientX; pointer.y = e.clientY; rerender();
-      });
-      const release = () => { pointer = null; };
-      renderer.domElement.addEventListener('pointerup', release);
-      renderer.domElement.addEventListener('pointercancel', release);
-      new ResizeObserver(resize).observe(canvasHost);
-      resize(); renderScene(value);
+      initProjectedCanvas();
     } catch (error) {
-      try { initProjectedCanvas(); }
-      catch (fallbackError) {
-        root.dataset.engine = 'fallback';
-        $('spatial-engine').textContent = en ? 'The interactive 3D view is unavailable on this device. The static diagram and the step-by-step explanation remain available.' : '此设备暂不能显示交互式三维图，仍可使用静态示意和分步说明。';
-        console.warn('Spatial visualisation fallback:', fallbackError.message);
-      }
+      root.dataset.engine = 'fallback';
+      $('spatial-engine').textContent = en
+        ? 'The interactive 3D view is unavailable on this device. The static diagram and the step-by-step explanation remain available.'
+        : '此设备暂不能显示交互式三维图，仍可使用静态示意和分步说明。';
+      console.warn('Spatial visualisation fallback:', error.message);
     }
   }
   if ('IntersectionObserver' in window) {

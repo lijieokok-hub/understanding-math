@@ -18,7 +18,7 @@ for(const lang of ['zh','en'])for(const s of screens){
     const response=await page.goto(base+(lang==='zh'?'rectangle.html':'en/rectangle.html'),{waitUntil:'load'});
     assert.equal(response.status(),200);
     await page.locator('#spatial-story').scrollIntoViewIfNeeded();
-    await page.waitForFunction(()=>['webgl','canvas2d'].includes(document.querySelector('#spatial-story').dataset.engine),null,{timeout:25000});
+    await page.waitForFunction(()=>document.querySelector('#spatial-story').dataset.engine==='canvas2d',null,{timeout:25000});
     const engine=await page.locator('#spatial-story').getAttribute('data-engine');
     assert.equal(await page.locator('#abstract-band-canvas canvas').count(),1);
     assert.equal(await page.locator('#spatial-canvas canvas').count(),1);
@@ -74,7 +74,7 @@ for(const lang of ['zh','en']){
     assert.equal(await page.locator('#spatial-story').getAttribute('data-phase'),'4');
     await page.locator('#diagonal-play').tap();
     assert.equal(await page.locator('#angle').inputValue(),'90');
-    console.log('PASS',lang,'Canvas 2D fallback and reduced motion');
+    console.log('PASS',lang,'GPU-free projection and reduced motion');
   }catch(e){failures.push(`${lang}/fallback: ${e}`);console.error('FAIL',failures.at(-1));}
   finally{await ctx.close();}
 }

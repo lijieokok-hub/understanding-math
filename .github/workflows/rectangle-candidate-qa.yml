@@ -37,7 +37,7 @@ jobs:
       - name: Bilingual rectangle story and responsive interactions
         if: always()
         run: node tests/rectangle-story.test.mjs
-      - name: Verify 3D mathematics and both rendering paths
+      - name: Verify 3D mathematics, projection and static fallback
         if: always()
         run: |
           node tests/rectangle-spatial-geometry.test.mjs
