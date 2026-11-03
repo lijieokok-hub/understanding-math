@@ -11,3 +11,13 @@ html[data-theme=dark] .hero-art .diagonal{stroke:#f1bb9d}
 .story-brand{display:block;width:min(220px,100%);flex:0 1 220px;line-height:0}.story-brand svg{display:block;width:100%;height:auto;max-height:42px}
 .mey-lab .lab-body{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);align-items:start}.mey-visuals{min-width:0}.mey-visuals svg{max-width:100%;height:auto}.mey-lab .controls{min-width:0}.mey-lab .controls .button{min-height:44px}.mey-lab .output{min-height:2.8em}.mey-visuals text{font:12px system-ui,sans-serif;fill:#355e51}.mey-visuals .axis{stroke:#78958a;stroke-width:1}.mey-visuals .wave{stroke:#a74d32;fill:none;stroke-width:3}.mey-visuals .circle{fill:#edf4e9;stroke:#356e59;stroke-width:2}.mey-visuals .square{fill:#dba77a33;stroke:#376f5f;stroke-width:2}.mey-visuals .d1{stroke:#bf6945;stroke-width:2}.mey-visuals .d2{stroke:#17877e;stroke-width:2}.mey-visuals .marker{fill:#a74d32;stroke:white;stroke-width:2}.reading-card{padding:1rem 1.1rem;border:1px solid var(--line);border-radius:12px;margin:.8rem 0}.reading-card p:last-child{margin-bottom:0}.reading-card h3{margin:.1rem 0 .4rem}.eyebrow-note{color:var(--muted);font-size:.9em}.mey-lab [hidden]{display:none}html[data-theme=dark] .mey-visuals text{fill:#d8e8d5}html[data-theme=dark] .mey-visuals .circle{fill:#385448;stroke:#a7d6b7}html[data-theme=dark] .mey-visuals .square{stroke:#b3d7bd}html[data-theme=dark] .mey-visuals .wave{stroke:#f1b795}html[data-theme=dark] .mey-visuals .marker{fill:#f1b795;stroke:#1f382c}
 @media(max-width:700px){.mey-lab .lab-body{grid-template-columns:1fr}.mey-lab .lab-head{padding:1rem 1rem 0}.mey-lab .lab-body{padding:0 1rem 1rem}.reading-card{padding:.85rem}.mey-visuals svg{max-height:260px}}
+
+/* The film shares the reading surface, and never preloads its 14 MB media. */
+.video-story{scroll-margin-top:1rem}
+.video-story-note{color:var(--muted);font-size:.92em}
+.video-story-figure{max-width:900px;margin:1.8rem auto 0}
+.video-story-player{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#1c302a;border:1px solid var(--line);border-radius:14px}
+.video-story-player:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+.video-story-actions{display:flex;flex-wrap:wrap;gap:.4rem 1.4rem;margin:.8rem .2rem 0;font:600 .9rem/1.7 system-ui,sans-serif}
+.video-story-actions a{display:inline-flex;align-items:center;min-height:44px}
+@media(max-width:700px){.video-story-figure{margin:1.3rem 0 0}.video-story-player{border-radius:10px}.video-story-actions{gap:0 1rem}}
