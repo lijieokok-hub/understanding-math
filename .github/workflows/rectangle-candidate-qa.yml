@@ -6,6 +6,7 @@ on:
       - feature/rectangle-3d-visuals-20261102
       - feature/rectangle-mobile-reading-20261102
       - fix/rectangle-logo-diamond-20261103
+      - fix/rectangle-logo-cache-20261103
   pull_request:
     branches:
       - main

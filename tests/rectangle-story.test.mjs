@@ -139,6 +139,29 @@ for (const route of routes) {
   } finally { await context.close(); }
 }
 
+// A previously cached unversioned stylesheet must not override the new URL.
+for (const route of routes) {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const page = await context.newPage();
+  let oldStylesheetRequested = false;
+  await page.route('**/*', async request => {
+    const url = new URL(request.request().url());
+    if (url.pathname.endsWith('/rectangle.css') && !url.search) {
+      oldStylesheetRequested = true;
+      await request.fulfill({ contentType: 'text/css', body: '.story-brand::before{content:"◇"}' });
+    } else await request.continue();
+  });
+  try {
+    await page.goto(root + route.path, { waitUntil: 'load' });
+    assert.equal(oldStylesheetRequested, false, `${route.id}: old cache URL was requested`);
+    assert.equal(await page.locator('header .story-brand').evaluate(el => getComputedStyle(el, '::before').content), 'none');
+    console.log('PASS', route.id, 'versioned stylesheet bypasses stale URL');
+  } catch (error) {
+    failures.push(`${route.id}/stylesheet-cache: ${error}`);
+    console.error('FAIL', failures.at(-1));
+  } finally { await context.close(); }
+}
+
 await browser.close();
 if (failures.length) {
   console.error('TOTAL FAILURES', failures.length, failures.join('\n'));
