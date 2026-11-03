@@ -40,6 +40,9 @@ for (const route of routes) {
     try {
       const response = await page.goto(root + route.path, { waitUntil: 'load' });
       assert.equal(response?.status(), 200, `${route.id} ${size.id}: HTTP status`);
+      const brand = page.locator('header .story-brand');
+      assert.equal(await brand.evaluate(el => getComputedStyle(el, '::before').content), 'none', `${route.id} ${size.id}: no added brand diamond in light mode`);
+      await page.locator('header').screenshot({ path: `rectangle-qa-shots/logo-${route.id}-${size.id}-light.png`, animations: 'disabled' });
       await page.waitForFunction(() => document.querySelectorAll('.katex').length > 10);
       assert.equal(await page.locator('.katex-error').count(), 0, `${route.id}: KaTeX errors`);
       await noOverflow(page, `${route.id} ${size.id}`);
@@ -69,6 +72,8 @@ for (const route of routes) {
       await page.locator('#reader-size').selectOption('2');
       await page.locator('#theme-toggle').click();
       assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
+      assert.equal(await brand.evaluate(el => getComputedStyle(el, '::before').content), 'none', `${route.id} ${size.id}: no added brand diamond in dark mode`);
+      await page.locator('header').screenshot({ path: `rectangle-qa-shots/logo-${route.id}-${size.id}-dark.png`, animations: 'disabled' });
       await noOverflow(page, `${route.id} ${size.id} at 200%`);
       assert.equal(await page.locator('.katex-error').count(), 0);
       await page.screenshot({ path: `rectangle-qa-shots/${route.id}-${size.id}-dark-200.png`, animations: 'disabled' });
