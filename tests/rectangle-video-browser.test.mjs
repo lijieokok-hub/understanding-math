@@ -16,6 +16,13 @@ try {
       try {
         const page = await context.newPage();
         page.setDefaultTimeout(15000);
+        const mediaRequests = [];
+        page.on('response', response => {
+          if (response.url().endsWith('.mp4')) mediaRequests.push({ status: response.status(), range: response.request().headers()['range'] });
+        });
+        page.on('requestfailed', request => {
+          if (request.url().endsWith('.mp4')) mediaRequests.push({ failed: request.failure()?.errorText });
+        });
         const response = await page.goto(new URL(route.path, root).href, { waitUntil: 'load', timeout: 30000 });
         assert.equal(response.status(), 200);
         const film = page.locator('#video');
@@ -29,12 +36,27 @@ try {
         assert.ok(dimensions.scroll <= dimensions.viewport + 3, `${route.id}/${id}: horizontal overflow`);
         const box = await video.boundingBox();
         assert.ok(box && box.width > 200 && box.width <= width, `${route.id}/${id}: player visible within viewport`);
-        // User gesture first; play() then tests media decoding without depending on native-control layout.
-        await video.click({ position: { x: 10, y: 10 } });
-        await video.evaluate(v => Promise.race([
-          v.play(),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('Video play() timed out after 15 seconds')), 15000)),
-        ]));
+        // A heading click supplies a user gesture without toggling native video controls.
+        // Muting avoids requiring an audio output device on a headless runner.
+        await film.locator('h2').click();
+        try {
+          await video.evaluate(v => {
+            v.muted = true;
+            return Promise.race([
+              v.play(),
+              new Promise((_, reject) => setTimeout(() => reject(new Error('Video play() timed out after 15 seconds')), 15000)),
+            ]);
+          });
+        } catch (error) {
+          const state = await video.evaluate(v => ({
+            currentSrc: v.currentSrc, readyState: v.readyState, networkState: v.networkState,
+            currentTime: v.currentTime, duration: v.duration, paused: v.paused,
+            mediaError: v.error && { code: v.error.code, message: v.error.message },
+            canPlayMp4: v.canPlayType('video/mp4; codecs="avc1.64001f, mp4a.40.2"'),
+          }));
+          console.error('Playback diagnostics', route.id, id, JSON.stringify({ state, mediaRequests }));
+          throw error;
+        }
         await page.waitForFunction(() => document.querySelector('#video video').currentTime > 0.15, null, { timeout: 15000 });
         const media = await video.evaluate(v => ({ duration: v.duration, error: v.error?.code, paused: v.paused, width: v.videoWidth, height: v.videoHeight }));
         assert.equal(media.error, undefined);
