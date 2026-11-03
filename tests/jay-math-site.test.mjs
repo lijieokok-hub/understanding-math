@@ -31,8 +31,13 @@ for(const p of pages)for(const size of sizes){
    const overflow=Array.from(document.querySelectorAll('body *')).map(e=>{const r=e.getBoundingClientRect();return {name:e.tagName+'.'+String(e.className?.baseVal||e.className||'').slice(0,40),right:Math.round(r.right),left:Math.round(r.left),w:Math.round(r.width)};}).filter(v=>v.right>innerWidth+5 && v.left>=0).slice(0,8);
    return {pageWidth:document.documentElement.scrollWidth,viewport:innerWidth,hero:sel('.home-hero'),brand:sel('.site-brand'),header:sel('.header-links'),toolbar:sel('.reader-tools'),reader:sel('.reading-shell'),title:sel('main h1'),math:sel('.math-display'),overflow};
   });
-  const shot=['home','home-en','topic','article','search'].includes(p.id) && ['tiny','phone','desktop'].includes(size.id);
+  const shot=['home','home-en','field','field-en','topic','article','search'].includes(p.id) && ['tiny','phone','desktop'].includes(size.id);
   if(shot)await page.screenshot({path:'jay-math-qa-shots/'+p.id+'-'+size.id+'.png',animations:'disabled'});
+  if(shot && ['home','home-en'].includes(p.id)){
+   await page.mouse.move(size.width-2,size.height-2);
+   await page.evaluate(()=>{document.activeElement?.blur();document.documentElement.dataset.theme='dark';});
+   await page.screenshot({path:'jay-math-qa-shots/'+p.id+'-'+size.id+'-dark.png',animations:'disabled'});
+  }
   console.log('METRIC',p.id,size.id,JSON.stringify(d));
   if(strict){
    assert.ok(d.pageWidth<=d.viewport+3,'horizontal overflow: '+p.id+' '+size.id+' '+d.pageWidth+'/'+d.viewport);
