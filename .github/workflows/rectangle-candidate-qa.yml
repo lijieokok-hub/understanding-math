@@ -12,7 +12,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: rectangle-candidate-qa-${{ github.ref }}
+  group: rectangle-candidate-qa-v2-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   chromium:
@@ -67,3 +67,4 @@ jobs:
             rectangle-qa-shots/
             rectangle-spatial-shots/
           if-no-files-found: ignore
+
