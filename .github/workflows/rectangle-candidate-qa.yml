@@ -31,10 +31,21 @@ jobs:
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/math-ui-server.log 2>&1 &
           echo $! >/tmp/math-ui-server.pid
+          for i in {1..30}; do
+            if curl --silent --fail http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/math-ui-server.log
+          exit 1
       - name: Existing site regression
         env:
           JAY_STRICT: 'true'
         run: node tests/jay-math-site.test.mjs
+      - name: Verify bilingual film resources and playback
+        if: always()
+        run: |
+          python3 tests/rectangle-video-static.test.py
+          node tests/rectangle-video-browser.test.mjs
       - name: Bilingual rectangle story and responsive interactions
         if: always()
         run: node tests/rectangle-story.test.mjs
