@@ -1,14 +1,14 @@
 import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 
-// Requires Chromium and a server at VIDEO_BASE_URL (default http://127.0.0.1:4173/).
+// Requires Google Chrome (for H.264/AAC) and a server at VIDEO_BASE_URL (default http://127.0.0.1:4173/).
 const root = (process.env.VIDEO_BASE_URL || 'http://127.0.0.1:4173/').replace(/\/?$/, '/');
 const routes = [{ id: 'zh', path: 'rectangle.html' }, { id: 'en', path: 'en/rectangle.html' }];
 const sizes = [
   { id: 'phone', width: 390, height: 844, isMobile: true, hasTouch: true },
   { id: 'desktop', width: 1440, height: 900, isMobile: false, hasTouch: false },
 ];
-const browser = await chromium.launch({ headless: true, args: ['--disable-dev-shm-usage'] });
+const browser = await chromium.launch({ channel: 'chrome', headless: true, args: ['--disable-dev-shm-usage'] });
 try {
   for (const route of routes) {
     for (const { id, width, height, isMobile, hasTouch } of sizes) {

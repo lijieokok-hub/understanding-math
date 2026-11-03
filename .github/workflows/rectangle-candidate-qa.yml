@@ -27,6 +27,7 @@ jobs:
         run: |
           npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1
           npx playwright install --with-deps chromium
+          command -v google-chrome >/dev/null || npx playwright install --with-deps chrome
       - name: Serve site
         run: |
           python3 tests/range_http_server.py 4173 >/tmp/math-ui-server.log 2>&1 &
@@ -67,4 +68,3 @@ jobs:
             rectangle-qa-shots/
             rectangle-spatial-shots/
           if-no-files-found: ignore
-
