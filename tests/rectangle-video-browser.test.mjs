@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 
 // Requires Google Chrome (for H.264/AAC) and a server at VIDEO_BASE_URL (default http://127.0.0.1:4173/).
 const root = (process.env.VIDEO_BASE_URL || 'http://127.0.0.1:4173/').replace(/\/?$/, '/');
+// Replace after the final video is rendered; never silently accept an unverified duration.
+const expectedDurationSeconds = 393.042;
 const routes = [{ id: 'zh', path: 'rectangle.html' }, { id: 'en', path: 'en/rectangle.html' }];
 const sizes = [
   { id: 'phone', width: 390, height: 844, isMobile: true, hasTouch: true },
@@ -61,7 +63,8 @@ try {
         const media = await video.evaluate(v => ({ duration: v.duration, error: v.error?.code, paused: v.paused, width: v.videoWidth, height: v.videoHeight }));
         assert.equal(media.error, undefined);
         assert.equal(media.paused, false);
-        assert.ok(media.duration > 370 && media.duration < 390, `${route.id}/${id}: duration`);
+        assert.ok(Number.isFinite(expectedDurationSeconds) && expectedDurationSeconds > 0, 'Set expectedDurationSeconds from the final video');
+        assert.ok(Math.abs(media.duration - expectedDurationSeconds) < 1, `${route.id}/${id}: unexpected duration ${media.duration}`);
         assert.ok(media.width > 0 && media.height > 0, `${route.id}/${id}: decoded video dimensions`);
         await video.evaluate(v => v.pause());
         assert.equal(await video.evaluate(v => v.paused), true);
