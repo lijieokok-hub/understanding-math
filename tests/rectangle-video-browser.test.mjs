@@ -15,7 +15,8 @@ try {
       const context = await browser.newContext({ viewport: { width, height }, isMobile, hasTouch });
       try {
         const page = await context.newPage();
-        const response = await page.goto(new URL(route.path, root).href, { waitUntil: 'load' });
+        page.setDefaultTimeout(15000);
+        const response = await page.goto(new URL(route.path, root).href, { waitUntil: 'load', timeout: 30000 });
         assert.equal(response.status(), 200);
         const film = page.locator('#video');
         const video = film.locator('video');
@@ -30,7 +31,10 @@ try {
         assert.ok(box && box.width > 200 && box.width <= width, `${route.id}/${id}: player visible within viewport`);
         // User gesture first; play() then tests media decoding without depending on native-control layout.
         await video.click({ position: { x: 10, y: 10 } });
-        await video.evaluate(v => v.play());
+        await video.evaluate(v => Promise.race([
+          v.play(),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Video play() timed out after 15 seconds')), 15000)),
+        ]));
         await page.waitForFunction(() => document.querySelector('#video video').currentTime > 0.15, null, { timeout: 15000 });
         const media = await video.evaluate(v => ({ duration: v.duration, error: v.error?.code, paused: v.paused, width: v.videoWidth, height: v.videoHeight }));
         assert.equal(media.error, undefined);
