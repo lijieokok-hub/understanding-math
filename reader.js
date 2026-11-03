@@ -1,5 +1,9 @@
  'use strict';
 Object.assign(window.MATH_DOCUMENT_TITLES||(window.MATH_DOCUMENT_TITLES={}),{
+ 'index.html':'数学·理解',
+ 'en/index.html':'Mathematics · Understanding',
+ 'dynamics.html':'遍历论与动力系统',
+ 'en/dynamics.html':'Ergodic theory and dynamical systems',
  'rectangle.html':'四个角的秘密',
  'en/rectangle.html':'Four Corners and a Twist',
  'close-reading.html':'多重遍历平均：主要结果',

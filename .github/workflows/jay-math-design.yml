@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - jay/math-design-20261026
+      - jay/topic-catalogue-20261103
       - main
     paths:
       - 'style.css'
@@ -13,6 +14,12 @@ on:
       - 'reader.js'
       - 'index.html'
       - 'en/index.html'
+      - 'dynamics.html'
+      - 'en/dynamics.html'
+      - 'topic.html'
+      - 'en/topic.html'
+      - 'content-manifest.json'
+      - 'tests/topic-navigation-static.test.py'
       - 'tests/jay-math-site.test.mjs'
       - '.github/workflows/jay-math-design.yml'
   workflow_dispatch:
@@ -31,6 +38,8 @@ jobs:
         run: |
           npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1
           npx playwright install --with-deps chromium
+      - name: Test field and topic routes
+        run: python3 tests/topic-navigation-static.test.py
       - name: Test bilingual pages and mathematical reading
         env:
           JAY_STRICT: 'true'

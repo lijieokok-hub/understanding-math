@@ -51,6 +51,18 @@
         "en"
       ],
       "title": {
+        "zh": "数学·理解",
+        "en": "Mathematics · Understanding"
+      }
+    },
+    {
+      "id": "dynamics",
+      "path": "dynamics.html",
+      "locales": [
+        "zh",
+        "en"
+      ],
+      "title": {
         "zh": "遍历论与动力系统",
         "en": "Ergodic theory and dynamical systems"
       }

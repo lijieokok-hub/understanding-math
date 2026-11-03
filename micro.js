@@ -121,6 +121,9 @@
   const header=document.querySelector('.site-header');
   const row=header?.querySelector('.brand-row');
   const nav=row?.querySelector('nav.header-links');
+  // The shared references link points to one topic, not a site-wide bibliography.
+  const refs=nav?.querySelector('a[href$="topic.html#references"]');
+  if(refs) refs.textContent=root.lang.toLowerCase().startsWith('en')?'Ergodic averages references':'多重遍历平均文献';
   const mobile=window.matchMedia('(max-width:700px)');
   let toggle=null;
   if(header && row && nav && !row.querySelector('.jay-math-menu-toggle')){

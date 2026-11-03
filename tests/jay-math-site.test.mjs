@@ -8,6 +8,8 @@ const failures=[];
 const pages=[
  {id:'home',url:'index.html'},
  {id:'home-en',url:'en/index.html'},
+ {id:'field',url:'dynamics.html'},
+ {id:'field-en',url:'en/dynamics.html'},
  {id:'topic',url:'topic.html'},
  {id:'topic-en',url:'en/topic.html'},
  {id:'search',url:'search.html'},
