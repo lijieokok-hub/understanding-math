@@ -1,0 +1,385 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:02.300
+Draw any closed loop.
+
+00:00:02.300 --> 00:00:06.254
+Now find four points on it that make a square.
+
+00:00:06.254 --> 00:00:11.320
+On a circle, easy. On a triangle, still possible.
+
+00:00:11.800 --> 00:00:13.470
+First, the rule.
+
+00:00:13.470 --> 00:00:17.803
+Inscribed means only the four vertices sit on the curve.
+
+00:00:17.803 --> 00:00:19.871
+Where the curve caves in,
+
+00:00:19.871 --> 00:00:23.290
+the edges of the square may pass outside it.
+
+00:00:23.770 --> 00:00:26.536
+Circles and triangles are easy.
+
+00:00:26.536 --> 00:00:30.297
+But what about a loop you scribble freehand?
+
+00:00:30.297 --> 00:00:32.890
+To this day, nobody knows.
+
+00:00:33.370 --> 00:00:36.584
+In 1911, Toeplitz posed the question.
+
+00:00:36.584 --> 00:00:39.797
+It is also called the square peg problem,
+
+00:00:39.797 --> 00:00:41.940
+or Toeplitz's conjecture.
+
+00:00:42.440 --> 00:00:45.390
+Attacking squares head-on is too hard.
+
+00:00:45.390 --> 00:00:49.067
+So loosen the rules: ask only for a rectangle,
+
+00:00:49.067 --> 00:00:52.515
+and let the aspect ratio be whatever it wants.
+
+00:00:52.515 --> 00:00:55.580
+That detour opened the door to topology.
+
+00:00:56.070 --> 00:00:59.518
+A rectangle's secret lies not in its four sides,
+
+00:00:59.518 --> 00:01:03.186
+but in its two diagonals. They share a midpoint,
+
+00:01:03.186 --> 00:01:05.240
+and they have equal length.
+
+00:01:05.740 --> 00:01:07.433
+The converse holds too.
+
+00:01:07.433 --> 00:01:10.853
+Take two distinct segments with the same midpoint,
+
+00:01:10.853 --> 00:01:14.066
+equal length, and four different endpoints:
+
+00:01:14.066 --> 00:01:16.899
+they are the diagonals of some rectangle.
+
+00:01:16.899 --> 00:01:19.110
+Four corners become two chords.
+
+00:01:19.610 --> 00:01:22.415
+So give every chord an address card:
+
+00:01:22.415 --> 00:01:26.037
+the x and y of its midpoint, plus its length.
+
+00:01:26.037 --> 00:01:27.790
+Three numbers in all.
+
+00:01:28.280 --> 00:01:30.969
+Lay the first two numbers on the floor,
+
+00:01:30.969 --> 00:01:32.959
+and use the third as height.
+
+00:01:32.959 --> 00:01:35.682
+Every chord becomes one point in space,
+
+00:01:35.682 --> 00:01:38.650
+and all the chords together form a surface.
+
+00:01:39.150 --> 00:01:40.790
+When the two ends meet,
+
+00:01:40.790 --> 00:01:42.634
+the chord has length zero,
+
+00:01:42.634 --> 00:01:45.333
+and its address falls back to the floor.
+
+00:01:45.333 --> 00:01:48.920
+So the boundary of this surface is the original curve.
+
+00:01:49.420 --> 00:01:52.053
+Two different cards at the same address
+
+00:01:52.053 --> 00:01:56.040
+mean two chords with a shared midpoint and equal length.
+
+00:01:56.040 --> 00:01:57.650
+A rectangle appears.
+
+00:01:57.650 --> 00:02:00.210
+What we are hunting is a collision.
+
+00:02:00.690 --> 00:02:03.325
+Put those two pairs back in the plane,
+
+00:02:03.325 --> 00:02:06.030
+and their four endpoints immediately form
+
+00:02:06.030 --> 00:02:07.786
+an inscribed rectangle.
+
+00:02:07.786 --> 00:02:11.580
+Finding rectangles became finding self-intersections.
+
+00:02:12.060 --> 00:02:14.402
+But why must it self-intersect?
+
+00:02:14.402 --> 00:02:17.622
+The answer lies not in how the surface looks,
+
+00:02:17.622 --> 00:02:20.110
+but in how the pairs are arranged.
+
+00:02:20.590 --> 00:02:22.812
+First keep the pairs ordered.
+
+00:02:22.812 --> 00:02:24.738
+They form a square sheet,
+
+00:02:24.738 --> 00:02:27.702
+and gluing opposite edges gives a torus.
+
+00:02:27.702 --> 00:02:30.665
+But swapping the two points still describes
+
+00:02:30.665 --> 00:02:31.850
+the same pair.
+
+00:02:32.320 --> 00:02:36.287
+So two edges of the sheet must be glued with a reversal.
+
+00:02:36.287 --> 00:02:40.440
+Add a half twist, and the torus becomes a Möbius strip.
+
+00:02:40.920 --> 00:02:44.484
+A Möbius strip has one side and one edge.
+
+00:02:44.484 --> 00:02:46.489
+It is not decoration.
+
+00:02:46.489 --> 00:02:49.830
+It is the home of all unordered pairs.
+
+00:02:50.350 --> 00:02:53.642
+Now cap it with the disk enclosed by the curve,
+
+00:02:53.642 --> 00:02:56.935
+glued along the whole boundary at height zero.
+
+00:02:56.935 --> 00:02:59.829
+The result is the real projective plane.
+
+00:02:59.829 --> 00:03:03.230
+This step rests on Jordan's separation theorem.
+
+00:03:03.720 --> 00:03:06.315
+The disk lies flat on the floor and cannot
+
+00:03:06.315 --> 00:03:07.920
+touch the strip above.
+
+00:03:07.920 --> 00:03:10.378
+But the real projective plane cannot be
+
+00:03:10.378 --> 00:03:13.178
+embedded in three-dimensional space without
+
+00:03:13.178 --> 00:03:14.612
+self-intersection.
+
+00:03:14.612 --> 00:03:16.490
+That is the contradiction.
+
+00:03:16.990 --> 00:03:19.445
+So a collision is unavoidable.
+
+00:03:19.445 --> 00:03:22.137
+Every continuous simple closed curve
+
+00:03:22.137 --> 00:03:24.830
+inscribes at least one rectangle.
+
+00:03:25.320 --> 00:03:27.021
+Do not celebrate yet.
+
+00:03:27.021 --> 00:03:29.592
+The proof guarantees a rectangle,
+
+00:03:29.592 --> 00:03:33.260
+but says nothing about choosing its aspect ratio.
+
+00:03:33.750 --> 00:03:37.412
+The stronger question is this: pick any ratio,
+
+00:03:37.412 --> 00:03:40.092
+flat or square or anything between.
+
+00:03:40.092 --> 00:03:41.640
+Is it always there?
+
+00:03:42.120 --> 00:03:44.869
+Hugelmeyer lifted the pair surface into
+
+00:03:44.869 --> 00:03:46.263
+four dimensions.
+
+00:03:46.263 --> 00:03:48.786
+Greene and Lobb then used symplectic
+
+00:03:48.786 --> 00:03:52.100
+geometry to force two surfaces to intersect.
+
+00:03:52.590 --> 00:03:55.032
+The glued object is a Klein bottle.
+
+00:03:55.032 --> 00:03:57.126
+It cannot be embedded as a smooth
+
+00:03:57.126 --> 00:03:59.673
+Lagrangian surface in four-dimensional
+
+00:03:59.673 --> 00:04:01.033
+symplectic space,
+
+00:04:01.033 --> 00:04:03.720
+so the intersection points are forced.
+
+00:04:04.190 --> 00:04:06.298
+That gave the 2021 theorem:
+
+00:04:06.298 --> 00:04:08.782
+every smooth Jordan curve inscribes
+
+00:04:08.782 --> 00:04:11.342
+rectangles of every aspect ratio,
+
+00:04:11.342 --> 00:04:12.810
+squares included.
+
+00:04:13.290 --> 00:04:16.480
+But "the century-old conjecture is solved"
+
+00:04:16.480 --> 00:04:17.933
+is a misreading.
+
+00:04:17.933 --> 00:04:20.558
+Only the smooth case is settled.
+
+00:04:20.558 --> 00:04:22.900
+The general case stays open.
+
+00:04:23.390 --> 00:04:27.487
+A 2026 preprint pushed the range to rectifiable curves:
+
+00:04:27.487 --> 00:04:30.104
+curves of finite length also inscribe
+
+00:04:30.104 --> 00:04:32.190
+rectangles of every ratio.
+
+00:04:32.690 --> 00:04:35.967
+Beyond that lie general continuous curves.
+
+00:04:35.967 --> 00:04:39.398
+They come with no guarantee of finite length,
+
+00:04:39.398 --> 00:04:41.750
+and no guarantee of a tangent.
+
+00:04:42.220 --> 00:04:45.088
+Could we approximate one by smooth curves,
+
+00:04:45.088 --> 00:04:47.580
+and then take a limit of the squares?
+
+00:04:48.050 --> 00:04:50.557
+Careful. The curves converge,
+
+00:04:50.557 --> 00:04:53.775
+but the squares may shrink all the way down,
+
+00:04:53.775 --> 00:04:57.592
+until the four corners collapse into a single point.
+
+00:04:57.592 --> 00:04:59.650
+That is no longer a square.
+
+00:05:00.150 --> 00:05:03.446
+Continuity only promises that the pen never
+
+00:05:03.446 --> 00:05:05.012
+leaves the paper.
+
+00:05:05.012 --> 00:05:07.030
+Length may be infinite.
+
+00:05:07.030 --> 00:05:09.420
+A tangent may exist nowhere.
+
+00:05:09.920 --> 00:05:11.677
+So the boundary is clear:
+
+00:05:11.677 --> 00:05:14.550
+every continuous curve has some rectangle,
+
+00:05:14.550 --> 00:05:18.200
+but a square for every curve is still only a conjecture.
+
+00:05:18.690 --> 00:05:21.651
+From four corners, to a Möbius strip,
+
+00:05:21.651 --> 00:05:24.500
+to four-dimensional symplectic space.
+
+00:05:24.500 --> 00:05:28.460
+One simple question forced new mathematics into being.
+
+00:05:28.960 --> 00:05:30.807
+Over a century of work,
+
+00:05:30.807 --> 00:05:34.656
+far more than three results. On the square side,
+
+00:05:34.656 --> 00:05:38.004
+Emch and Schnirelman reached smooth curves.
+
+00:05:38.004 --> 00:05:39.813
+On the rectangle side,
+
+00:05:39.813 --> 00:05:43.276
+Vaughan proved rectangles must exist in 1977,
+
+00:05:43.276 --> 00:05:46.701
+Greene and Lobb obtained every ratio in 2021,
+
+00:05:46.701 --> 00:05:48.933
+and Asano and Ike extended it to
+
+00:05:48.933 --> 00:05:51.127
+rectifiable curves in 2026.
+
+00:05:51.127 --> 00:05:53.552
+For general continuous curves,
+
+00:05:53.552 --> 00:05:56.130
+the square is still a conjecture.
+
+00:05:56.630 --> 00:05:59.954
+Next time you scribble a closed loop, remember:
+
+00:05:59.954 --> 00:06:02.606
+you may be drawing a boundary that humanity
+
+00:06:02.606 --> 00:06:04.050
+has not yet crossed.

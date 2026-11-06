@@ -1,0 +1,149 @@
+One Loop, Four Corners | Inscribed Rectangles and Squares - Film Transcript
+English edition v11 (2026-11-06) | about 6 min 04 s | English narration, English captions burned into the picture
+
+[01 - Must a Square Be Hiding?]
+Draw any closed loop.
+Now find four points on it that make a square.
+On a circle, easy.
+On a triangle, still possible.
+
+[02 - Only the Four Vertices]
+First, the rule.
+Inscribed means only the four vertices sit on the curve.
+Where the curve caves in, the edges of the square may pass outside it.
+
+[03 - Easy Cases, Hard General Case]
+Circles and triangles are easy.
+But what about a loop you scribble freehand?
+To this day, nobody knows.
+
+[04 - 1911 · Toeplitz]
+In 1911, Toeplitz posed the question.
+It is also called the square peg problem, or Toeplitz's conjecture.
+
+[05 - Switch to Rectangles First]
+Attacking squares head-on is too hard.
+So loosen the rules: ask only for a rectangle, and let the aspect ratio be whatever it wants.
+That detour opened the door to topology.
+
+[06 - Same Midpoint · Equal Length]
+A rectangle's secret lies not in its four sides, but in its two diagonals.
+They share a midpoint, and they have equal length.
+
+[07 - Two Pairs Are Enough]
+The converse holds too.
+Take two distinct segments with the same midpoint, equal length, and four different endpoints: they are the diagonals of some rectangle.
+Four corners become two chords.
+
+[08 - A Pair → Three Numbers]
+So give every chord an address card: the x and y of its midpoint, plus its length.
+Three numbers in all.
+
+[09 - Length Becomes Height]
+Lay the first two numbers on the floor, and use the third as height.
+Every chord becomes one point in space, and all the chords together form a surface.
+
+[10 - The Boundary Is the Original Curve]
+When the two ends meet, the chord has length zero, and its address falls back to the floor.
+So the boundary of this surface is the original curve.
+
+[11 - Intersection = Rectangle]
+Two different cards at the same address mean two chords with a shared midpoint and equal length.
+A rectangle appears.
+What we are hunting is a collision.
+
+[12 - A Collision Creates a Rectangle]
+Put those two pairs back in the plane, and their four endpoints immediately form an inscribed rectangle.
+Finding rectangles became finding self-intersections.
+
+[13 - Why Must They Intersect?]
+But why must it self-intersect?
+The answer lies not in how the surface looks, but in how the pairs are arranged.
+
+[14 - Ordered Pairs: A Torus]
+First keep the pairs ordered.
+They form a square sheet, and gluing opposite edges gives a torus.
+But swapping the two points still describes the same pair.
+
+[15 - Swap the Pair, Add a Twist]
+So two edges of the sheet must be glued with a reversal.
+Add a half twist, and the torus becomes a Möbius strip.
+
+[16 - One Side · One Edge]
+A Möbius strip has one side and one edge.
+It is not decoration.
+It is the home of all unordered pairs.
+
+[17 - Cap the Boundary]
+Now cap it with the disk enclosed by the curve, glued along the whole boundary at height zero.
+The result is the real projective plane.
+This step rests on Jordan's separation theorem.
+
+[18 - Self-Intersection Is Forced]
+The disk lies flat on the floor and cannot touch the strip above.
+But the real projective plane cannot be embedded in three-dimensional space without self-intersection.
+That is the contradiction.
+
+[19 - Any Jordan Curve: A Rectangle]
+So a collision is unavoidable.
+Every continuous simple closed curve inscribes at least one rectangle.
+
+[20 - But the Aspect Ratio Escapes]
+Do not celebrate yet.
+The proof guarantees a rectangle, but says nothing about choosing its aspect ratio.
+
+[21 - Every Aspect Ratio?]
+The stronger question is this: pick any ratio, flat or square or anything between.
+Is it always there?
+
+[22 - Lift to Four Dimensions]
+Hugelmeyer lifted the pair surface into four dimensions.
+Greene and Lobb then used symplectic geometry to force two surfaces to intersect.
+
+[23 - Enter the Klein Bottle]
+The glued object is a Klein bottle.
+It cannot be embedded as a smooth Lagrangian surface in four-dimensional symplectic space, so the intersection points are forced.
+
+[24 - 2021 · The Smooth Case]
+That gave the 2021 theorem: every smooth Jordan curve inscribes rectangles of every aspect ratio, squares included.
+
+[25 - The General Case Is Still Open]
+But "the century-old conjecture is solved" is a misreading.
+Only the smooth case is settled.
+The general case stays open.
+
+[26 - 2026 · Rectifiable Curves]
+A 2026 preprint pushed the range to rectifiable curves: curves of finite length also inscribe rectangles of every ratio.
+
+[27 - The General Conjecture Remains Open]
+Beyond that lie general continuous curves.
+They come with no guarantee of finite length, and no guarantee of a tangent.
+
+[28 - Approximate, Then Take a Limit?]
+Could we approximate one by smooth curves, and then take a limit of the squares?
+
+[29 - It Can Collapse to a Point]
+Careful.
+The curves converge, but the squares may shrink all the way down, until the four corners collapse into a single point.
+That is no longer a square.
+
+[30 - Continuous ≠ Smooth]
+Continuity only promises that the pen never leaves the paper.
+Length may be infinite.
+A tangent may exist nowhere.
+
+[31 - Here Is the Boundary]
+So the boundary is clear: every continuous curve has some rectangle, but a square for every curve is still only a conjecture.
+
+[32 - A Simple Question, New Tools]
+From four corners, to a Möbius strip, to four-dimensional symplectic space.
+One simple question forced new mathematics into being.
+
+[33 - A Century of Research]
+Over a century of work, far more than three results.
+On the square side, Emch and Schnirelman reached smooth curves.
+On the rectangle side, Vaughan proved rectangles must exist in 1977, Greene and Lobb obtained every ratio in 2021, and Asano and Ike extended it to rectifiable curves in 2026.
+For general continuous curves, the square is still a conjecture.
+
+[34 - The Question Has No Full Stop]
+Next time you scribble a closed loop, remember: you may be drawing a boundary that humanity has not yet crossed.
